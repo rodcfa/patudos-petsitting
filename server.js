@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'src', 'static')));
 
 // Database setup
 const db = new sqlite3.Database('./database.db');
@@ -124,15 +123,11 @@ function calculateDays(dataInicio, dataFim) {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 }
 
-// Routes
-
-// Serve static files
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src', 'static', 'index.html'));
-});
+// API Routes - MUST come before static file serving
 
 // User routes
 app.get('/api/users', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     db.all("SELECT * FROM users", (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -143,6 +138,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     const { username, email } = req.body;
     
     db.run("INSERT INTO users (username, email) VALUES (?, ?)", [username, email], function(err) {
@@ -163,6 +159,7 @@ app.post('/api/users', (req, res) => {
 
 // Agendamentos routes
 app.get('/api/agendamentos', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     db.all("SELECT * FROM agendamentos ORDER BY data_inicio", (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -179,6 +176,7 @@ app.get('/api/agendamentos', (req, res) => {
 });
 
 app.post('/api/agendamentos', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     const { nome_pet, data_inicio, data_fim, valor_por_dia, observacoes, status } = req.body;
     
     if (!nome_pet || !data_inicio || !data_fim) {
@@ -220,6 +218,7 @@ app.post('/api/agendamentos', (req, res) => {
 });
 
 app.put('/api/agendamentos/:id', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     const { id } = req.params;
     const { nome_pet, data_inicio, data_fim, valor_por_dia, observacoes, status } = req.body;
     
@@ -262,6 +261,7 @@ app.put('/api/agendamentos/:id', (req, res) => {
 });
 
 app.delete('/api/agendamentos/:id', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     const { id } = req.params;
     
     db.run("DELETE FROM agendamentos WHERE id = ?", [id], function(err) {
@@ -281,6 +281,7 @@ app.delete('/api/agendamentos/:id', (req, res) => {
 });
 
 app.get('/api/contagem-diaria', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     db.all("SELECT * FROM contagem_diaria ORDER BY data", (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -291,6 +292,7 @@ app.get('/api/contagem-diaria', (req, res) => {
 });
 
 app.get('/api/contagem-diaria/:data', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     const { data } = req.params;
     
     db.get("SELECT * FROM contagem_diaria WHERE data = ?", [data], (err, row) => {
@@ -308,6 +310,7 @@ app.get('/api/contagem-diaria/:data', (req, res) => {
 });
 
 app.get('/api/agendamentos/data/:data', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     const { data } = req.params;
     
     db.all(
@@ -331,6 +334,7 @@ app.get('/api/agendamentos/data/:data', (req, res) => {
 
 // Financial routes
 app.get('/api/financeiro/resumo', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     db.all("SELECT * FROM agendamentos", (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -359,6 +363,7 @@ app.get('/api/financeiro/resumo', (req, res) => {
 });
 
 app.get('/api/financeiro/por-mes', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     db.all("SELECT * FROM agendamentos", (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -404,6 +409,7 @@ app.get('/api/financeiro/por-mes', (req, res) => {
 });
 
 app.get('/api/financeiro/top-pets', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     db.all("SELECT * FROM agendamentos", (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -440,6 +446,19 @@ app.get('/api/financeiro/top-pets', (req, res) => {
         
         res.json(resultado);
     });
+});
+
+// Static files - MUST come after API routes
+app.use(express.static(path.join(__dirname, 'src', 'static')));
+
+// Serve index.html for all non-API routes (SPA fallback)
+app.get('*', (req, res) => {
+    // Only serve index.html for non-API routes
+    if (!req.path.startsWith('/api/')) {
+        res.sendFile(path.join(__dirname, 'src', 'static', 'index.html'));
+    } else {
+        res.status(404).json({ error: 'API endpoint not found' });
+    }
 });
 
 // Start server
