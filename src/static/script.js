@@ -166,16 +166,32 @@ function getFirstDayOfMonth(date) {
 }
 
 function getAgendamentosForDate(date) {
-    // Normalizar a data para meia-noite UTC para comparação consistente
-    const targetDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    // Criar data normalizada para comparação (apenas ano, mês, dia)
+    const targetYear = date.getFullYear();
+    const targetMonth = date.getMonth();
+    const targetDay = date.getDate();
     
     return agendamentos.filter(agendamento => {
-        // Converter strings de data para objetos Date em UTC
-        const dataInicio = new Date(agendamento.data_inicio + 'T00:00:00.000Z');
-        const dataFim = new Date(agendamento.data_fim + 'T00:00:00.000Z');
+        // Converter strings de data para objetos Date
+        const dataInicio = new Date(agendamento.data_inicio + 'T00:00:00');
+        const dataFim = new Date(agendamento.data_fim + 'T00:00:00');
         
-        // Verificar se a data alvo está dentro do período do agendamento
-        return targetDate >= dataInicio && targetDate <= dataFim;
+        // Extrair componentes das datas de início e fim
+        const inicioYear = dataInicio.getFullYear();
+        const inicioMonth = dataInicio.getMonth();
+        const inicioDay = dataInicio.getDate();
+        
+        const fimYear = dataFim.getFullYear();
+        const fimMonth = dataFim.getMonth();
+        const fimDay = dataFim.getDate();
+        
+        // Criar datas normalizadas para comparação
+        const targetDate = new Date(targetYear, targetMonth, targetDay);
+        const startDate = new Date(inicioYear, inicioMonth, inicioDay);
+        const endDate = new Date(fimYear, fimMonth, fimDay);
+        
+        // Verificar se a data alvo está dentro do período do agendamento (inclusive)
+        return targetDate >= startDate && targetDate <= endDate;
     });
 }
 
@@ -245,10 +261,9 @@ function createDayElement(date, dayNum, isOtherMonth = false, isToday = false) {
     
     // Get pets for this date - APENAS para dias do mês atual
     const petsForDate = isOtherMonth ? [] : getAgendamentosForDate(date);
-    const dateStr = formatDate(date);
-    const petCount = isOtherMonth ? 0 : (contagemDiaria[dateStr] || 0);
+    const petCount = petsForDate.length;
     
-    // Add occupancy class - APENAS para dias do mês atual
+    // Add occupancy class - APENAS para dias do mês atual que têm pets
     if (!isOtherMonth && !isToday && petCount > 0) {
         const occupancyClass = getOccupancyClass(petCount);
         if (occupancyClass) {
@@ -268,7 +283,7 @@ function createDayElement(date, dayNum, isOtherMonth = false, isToday = false) {
     dayNumber.textContent = dayNum;
     dayElement.appendChild(dayNumber);
     
-    // Pet count badge - APENAS para dias do mês atual
+    // Pet count badge - APENAS para dias do mês atual que têm pets
     if (!isOtherMonth && petCount > 0) {
         const petCountElement = document.createElement('div');
         petCountElement.className = 'pet-count';
@@ -481,9 +496,8 @@ function hideEditModal() {
 
 // Day details functions
 async function showDayDetails(date) {
-    const dateStr = formatDate(date);
-    const agendamentosData = await fetchAgendamentosPorData(dateStr);
-    const petCount = contagemDiaria[dateStr] || 0;
+    const agendamentosData = getAgendamentosForDate(date);
+    const petCount = agendamentosData.length;
     
     // Format date for display
     const dateFormatted = date.toLocaleDateString('pt-BR', {
