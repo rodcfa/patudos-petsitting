@@ -18,7 +18,7 @@ import {
   calculateTopPets 
 } from '../services/financeiro.js';
 
-import { calculateContagemDiaria } from '../lib/supabase.js';
+import { calculateContagemDiaria, testSupabaseConnection } from '../lib/supabase.js';
 
 // DOM elements
 const calendarDays = document.getElementById('calendarDays');
@@ -67,11 +67,28 @@ function hideModal() {
 // Data functions
 async function loadAgendamentos() {
     try {
+        console.log('🚀 Iniciando carregamento de agendamentos...')
         agendamentos = await fetchAgendamentos();
         contagemDiaria = calculateContagemDiaria(agendamentos);
+        console.log('✅ Agendamentos carregados e contagem calculada')
     } catch (error) {
-        console.error('Erro ao carregar agendamentos:', error);
-        alert('Erro ao carregar agendamentos. Verifique sua conexão.');
+        console.error('❌ Erro ao carregar agendamentos:', error);
+        
+        // Mostrar erro específico para o usuário
+        let errorMessage = 'Erro ao carregar agendamentos. ';
+        
+        if (error.message.includes('tabela')) {
+            errorMessage += 'A tabela do banco de dados não foi encontrada. Verifique se as migrações foram executadas.';
+        } else if (error.message.includes('API key')) {
+            errorMessage += 'Credenciais do Supabase inválidas. Verifique as variáveis de ambiente.';
+        } else if (error.message.includes('conexão')) {
+            errorMessage += 'Problema de conexão com o banco de dados. Verifique sua internet.';
+        } else {
+            errorMessage += 'Verifique sua conexão e configurações do Supabase.';
+        }
+        
+        alert(errorMessage);
+        throw error;
     }
 }
 
@@ -88,7 +105,7 @@ async function handleCreateAgendamento(data) {
         
         alert('Agendamento criado com sucesso!');
     } catch (error) {
-        console.error('Erro ao criar agendamento:', error);
+        console.error('❌ Erro ao criar agendamento:', error);
         alert(`Erro ao criar agendamento: ${error.message}`);
     } finally {
         hideLoading();
@@ -111,7 +128,7 @@ async function handleUpdateAgendamento(id, data) {
         
         alert('Agendamento atualizado com sucesso!');
     } catch (error) {
-        console.error('Erro ao atualizar agendamento:', error);
+        console.error('❌ Erro ao atualizar agendamento:', error);
         alert(`Erro ao atualizar agendamento: ${error.message}`);
     } finally {
         hideLoading();
@@ -132,7 +149,7 @@ async function handleDeleteAgendamento(id) {
         
         alert('Agendamento excluído com sucesso!');
     } catch (error) {
-        console.error('Erro ao excluir agendamento:', error);
+        console.error('❌ Erro ao excluir agendamento:', error);
         alert(`Erro ao excluir agendamento: ${error.message}`);
     } finally {
         hideLoading();
@@ -364,12 +381,56 @@ document.addEventListener('keydown', (event) => {
 // Initialize app
 async function initApp() {
     try {
+        console.log('🚀 Iniciando aplicação Patudos...')
         showLoading();
+        
+        // Primeiro testar a conexão
+        console.log('🔍 Testando conexão com Supabase...')
+        await testSupabaseConnection();
+        
+        // Depois carregar os dados
         await loadAgendamentos();
         renderCalendar();
+        
+        console.log('✅ Aplicação inicializada com sucesso!')
     } catch (error) {
-        console.error('Erro ao inicializar aplicativo:', error);
-        alert('Erro ao carregar dados. Verifique sua conexão com o Supabase.');
+        console.error('❌ Erro ao inicializar aplicativo:', error);
+        
+        // Mostrar erro detalhado
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fee2e2;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 500px;
+            z-index: 9999;
+            font-family: Arial, sans-serif;
+        `;
+        
+        errorDiv.innerHTML = `
+            <h3 style="color: #dc2626; margin: 0 0 10px 0;">❌ Erro de Conexão</h3>
+            <p style="margin: 0 0 15px 0;">${error.message}</p>
+            <details style="margin-top: 10px;">
+                <summary style="cursor: pointer; color: #6b7280;">Detalhes técnicos</summary>
+                <pre style="background: #f3f4f6; padding: 10px; border-radius: 4px; margin-top: 10px; font-size: 12px; overflow: auto;">${error.stack || error.message}</pre>
+            </details>
+            <button onclick="location.reload()" style="
+                background: #dc2626;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 15px;
+            ">Tentar Novamente</button>
+        `;
+        
+        document.body.appendChild(errorDiv);
     } finally {
         hideLoading();
     }
@@ -662,7 +723,7 @@ async function loadDashboardData() {
         updateDetailsTable(dadosMensais);
         
     } catch (error) {
-        console.error('Erro ao carregar dados do dashboard:', error);
+        console.error('❌ Erro ao carregar dados do dashboard:', error);
         alert('Erro ao carregar dados financeiros');
     } finally {
         hideLoading();
