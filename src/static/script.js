@@ -3,6 +3,23 @@ let currentDate = new Date();
 let agendamentos = [];
 let contagemDiaria = {};
 
+// Import services
+import { 
+  fetchAgendamentos, 
+  createAgendamento, 
+  updateAgendamento, 
+  deleteAgendamento, 
+  fetchAgendamentosPorData 
+} from '../services/agendamentos.js';
+
+import { 
+  calculateResumoFinanceiro, 
+  calculateReceitaPorMes, 
+  calculateTopPets 
+} from '../services/financeiro.js';
+
+import { calculateContagemDiaria } from '../lib/supabase.js';
+
 // DOM elements
 const calendarDays = document.getElementById('calendarDays');
 const currentMonthElement = document.getElementById('currentMonth');
@@ -14,12 +31,6 @@ const closeModalBtn = document.getElementById('closeModal');
 const cancelBtn = document.getElementById('cancelBtn');
 const agendamentoForm = document.getElementById('agendamentoForm');
 const loadingOverlay = document.getElementById('loadingOverlay');
-
-// LocalStorage keys
-const STORAGE_KEYS = {
-    AGENDAMENTOS: 'patudos_agendamentos',
-    CONTAGEM_DIARIA: 'patudos_contagem_diaria'
-};
 
 // Utility functions
 function formatDate(date) {
@@ -53,153 +64,25 @@ function hideModal() {
     agendamentoForm.reset();
 }
 
-// LocalStorage functions
-function saveToStorage(key, data) {
-    try {
-        localStorage.setItem(key, JSON.stringify(data));
-    } catch (error) {
-        console.error('Erro ao salvar no localStorage:', error);
-    }
-}
-
-function loadFromStorage(key, defaultValue = []) {
-    try {
-        const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) : defaultValue;
-    } catch (error) {
-        console.error('Erro ao carregar do localStorage:', error);
-        return defaultValue;
-    }
-}
-
 // Data functions
-function generateId() {
-    return Date.now() + Math.random().toString(36).substr(2, 9);
-}
-
-function calculateDays(dataInicio, dataFim) {
-    const inicio = new Date(dataInicio);
-    const fim = new Date(dataFim);
-    const diffTime = Math.abs(fim - inicio);
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-}
-
-function calculateReceitaTotal(agendamento) {
-    if (agendamento.data_inicio && agendamento.data_fim && agendamento.valor_por_dia) {
-        const dias = calculateDays(agendamento.data_inicio, agendamento.data_fim);
-        return parseFloat(agendamento.valor_por_dia) * dias;
-    }
-    return 0.0;
-}
-
-function updateContagemDiaria() {
-    const contagem = {};
-    
-    agendamentos.forEach(agendamento => {
-        const dataInicio = new Date(agendamento.data_inicio);
-        const dataFim = new Date(agendamento.data_fim);
-        
-        for (let d = new Date(dataInicio); d <= dataFim; d.setDate(d.getDate() + 1)) {
-            const dateStr = formatDate(d);
-            contagem[dateStr] = (contagem[dateStr] || 0) + 1;
-        }
-    });
-    
-    contagemDiaria = contagem;
-    saveToStorage(STORAGE_KEYS.CONTAGEM_DIARIA, contagem);
-}
-
-// API simulation functions
-async function fetchAgendamentos() {
+async function loadAgendamentos() {
     try {
-        agendamentos = loadFromStorage(STORAGE_KEYS.AGENDAMENTOS, []);
-        
-        // Add sample data if empty
-        if (agendamentos.length === 0) {
-            const sampleData = [
-                {
-                    id: generateId(),
-                    nome_pet: "Bolinha",
-                    data_inicio: "2025-07-10",
-                    data_fim: "2025-07-15",
-                    valor_por_dia: 25.0,
-                    observacoes: "Cachorro muito dócil, gosta de brincar no jardim.",
-                    status: "Confirmado",
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: generateId(),
-                    nome_pet: "Rex",
-                    data_inicio: "2025-07-12",
-                    data_fim: "2025-07-18",
-                    valor_por_dia: 30.0,
-                    observacoes: "Precisa de medicação às 8h e 20h. Muito carinhoso.",
-                    status: "Confirmado",
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: generateId(),
-                    nome_pet: "Luna",
-                    data_inicio: "2025-07-12",
-                    data_fim: "2025-07-14",
-                    valor_por_dia: 35.0,
-                    observacoes: "Gata independente, apenas alimentação e carinho.",
-                    status: "Confirmado",
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: generateId(),
-                    nome_pet: "Max",
-                    data_inicio: "2025-07-13",
-                    data_fim: "2025-07-13",
-                    valor_por_dia: 40.0,
-                    observacoes: "Apenas um dia, cachorro muito ativo.",
-                    status: "Confirmado",
-                    created_at: new Date().toISOString()
-                }
-            ];
-            
-            agendamentos = sampleData;
-            saveToStorage(STORAGE_KEYS.AGENDAMENTOS, agendamentos);
-        }
-        
-        // Add receita_total to each agendamento
-        agendamentos = agendamentos.map(agendamento => ({
-            ...agendamento,
-            receita_total: calculateReceitaTotal(agendamento)
-        }));
-        
+        agendamentos = await fetchAgendamentos();
+        contagemDiaria = calculateContagemDiaria(agendamentos);
     } catch (error) {
-        console.error('Erro ao buscar agendamentos:', error);
-        alert('Erro ao carregar agendamentos. Tente novamente.');
+        console.error('Erro ao carregar agendamentos:', error);
+        alert('Erro ao carregar agendamentos. Verifique sua conexão.');
     }
 }
 
-async function fetchContagemDiaria() {
-    try {
-        contagemDiaria = loadFromStorage(STORAGE_KEYS.CONTAGEM_DIARIA, {});
-        updateContagemDiaria();
-    } catch (error) {
-        console.error('Erro ao buscar contagem diária:', error);
-    }
-}
-
-async function createAgendamento(data) {
+async function handleCreateAgendamento(data) {
     try {
         showLoading();
         
-        const newAgendamento = {
-            id: generateId(),
-            ...data,
-            status: data.status || 'Confirmado',
-            created_at: new Date().toISOString(),
-            receita_total: calculateReceitaTotal(data)
-        };
-        
+        const newAgendamento = await createAgendamento(data);
         agendamentos.push(newAgendamento);
-        saveToStorage(STORAGE_KEYS.AGENDAMENTOS, agendamentos);
+        contagemDiaria = calculateContagemDiaria(agendamentos);
         
-        updateContagemDiaria();
         renderCalendar();
         hideModal();
         
@@ -212,23 +95,17 @@ async function createAgendamento(data) {
     }
 }
 
-async function updateAgendamento(id, data) {
+async function handleUpdateAgendamento(id, data) {
     try {
         showLoading();
         
+        const updatedAgendamento = await updateAgendamento(id, data);
         const index = agendamentos.findIndex(a => a.id === id);
-        if (index === -1) {
-            throw new Error('Agendamento não encontrado');
+        if (index !== -1) {
+            agendamentos[index] = updatedAgendamento;
         }
         
-        agendamentos[index] = {
-            ...agendamentos[index],
-            ...data,
-            receita_total: calculateReceitaTotal({ ...agendamentos[index], ...data })
-        };
-        
-        saveToStorage(STORAGE_KEYS.AGENDAMENTOS, agendamentos);
-        updateContagemDiaria();
+        contagemDiaria = calculateContagemDiaria(agendamentos);
         renderCalendar();
         hideEditModal();
         
@@ -241,14 +118,14 @@ async function updateAgendamento(id, data) {
     }
 }
 
-async function deleteAgendamento(id) {
+async function handleDeleteAgendamento(id) {
     try {
         showLoading();
         
+        await deleteAgendamento(id);
         agendamentos = agendamentos.filter(a => a.id !== id);
-        saveToStorage(STORAGE_KEYS.AGENDAMENTOS, agendamentos);
         
-        updateContagemDiaria();
+        contagemDiaria = calculateContagemDiaria(agendamentos);
         renderCalendar();
         hideEditModal();
         hideDayDetailsModal();
@@ -259,20 +136,6 @@ async function deleteAgendamento(id) {
         alert(`Erro ao excluir agendamento: ${error.message}`);
     } finally {
         hideLoading();
-    }
-}
-
-async function fetchAgendamentosPorData(data) {
-    try {
-        const targetDate = new Date(data + 'T00:00:00');
-        return agendamentos.filter(agendamento => {
-            const inicio = new Date(agendamento.data_inicio + 'T00:00:00');
-            const fim = new Date(agendamento.data_fim + 'T00:00:00');
-            return targetDate >= inicio && targetDate <= fim;
-        });
-    } catch (error) {
-        console.error('Erro ao buscar agendamentos da data:', error);
-        return [];
     }
 }
 
@@ -473,7 +336,7 @@ function handleFormSubmit(event) {
         return;
     }
     
-    createAgendamento(data);
+    handleCreateAgendamento(data);
 }
 
 // Event listeners
@@ -502,14 +365,11 @@ document.addEventListener('keydown', (event) => {
 async function initApp() {
     try {
         showLoading();
-        await Promise.all([
-            fetchAgendamentos(),
-            fetchContagemDiaria()
-        ]);
+        await loadAgendamentos();
         renderCalendar();
     } catch (error) {
         console.error('Erro ao inicializar aplicativo:', error);
-        alert('Erro ao carregar dados. Recarregue a página.');
+        alert('Erro ao carregar dados. Verifique sua conexão com o Supabase.');
     } finally {
         hideLoading();
     }
@@ -661,7 +521,7 @@ function confirmDeleteAgendamento(id) {
     const confirmMessage = `Tem certeza que deseja excluir completamente a estadia de ${agendamento.nome_pet}?\n\nEsta ação não pode ser desfeita.`;
     
     if (confirm(confirmMessage)) {
-        deleteAgendamento(id);
+        handleDeleteAgendamento(id);
     }
 }
 
@@ -709,7 +569,7 @@ function handleEditFormSubmit(event) {
         return;
     }
     
-    updateAgendamento(id, data);
+    handleUpdateAgendamento(id, data);
 }
 
 // Additional event listeners
@@ -783,13 +643,13 @@ async function loadDashboardData() {
         showLoading();
         
         // Calculate financial summary
-        const resumo = calculateResumoFinanceiro();
+        const resumo = calculateResumoFinanceiro(agendamentos);
         
         // Calculate monthly revenue
-        const dadosMensais = calculateReceitaPorMes();
+        const dadosMensais = calculateReceitaPorMes(agendamentos);
         
         // Calculate top pets
-        const topPets = calculateTopPets();
+        const topPets = calculateTopPets(agendamentos);
         
         // Update summary cards
         updateSummaryCards(resumo);
@@ -807,93 +667,6 @@ async function loadDashboardData() {
     } finally {
         hideLoading();
     }
-}
-
-function calculateResumoFinanceiro() {
-    let receita_total = 0;
-    let total_dias_hospedagem = 0;
-    
-    agendamentos.forEach(agendamento => {
-        const dias = calculateDays(agendamento.data_inicio, agendamento.data_fim);
-        const receita = (agendamento.valor_por_dia || 0) * dias;
-        receita_total += receita;
-        total_dias_hospedagem += dias;
-    });
-    
-    const valor_medio_por_dia = total_dias_hospedagem > 0 ? receita_total / total_dias_hospedagem : 0;
-    
-    return {
-        receita_total: Math.round(receita_total * 100) / 100,
-        total_agendamentos: agendamentos.length,
-        total_dias_hospedagem,
-        valor_medio_por_dia: Math.round(valor_medio_por_dia * 100) / 100
-    };
-}
-
-function calculateReceitaPorMes() {
-    const receitaPorMes = {};
-    
-    agendamentos.forEach(agendamento => {
-        const dataInicio = new Date(agendamento.data_inicio);
-        const dataFim = new Date(agendamento.data_fim);
-        
-        for (let d = new Date(dataInicio); d <= dataFim; d.setDate(d.getDate() + 1)) {
-            const mesAno = d.toISOString().slice(0, 7); // YYYY-MM
-            const mes = d.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-            
-            if (!receitaPorMes[mesAno]) {
-                receitaPorMes[mesAno] = {
-                    mes: mes,
-                    mes_ano: mesAno,
-                    receita: 0,
-                    dias_hospedagem: 0,
-                    agendamentos: new Set()
-                };
-            }
-            
-            receitaPorMes[mesAno].receita += (agendamento.valor_por_dia || 0);
-            receitaPorMes[mesAno].dias_hospedagem += 1;
-            receitaPorMes[mesAno].agendamentos.add(agendamento.id);
-        }
-    });
-    
-    return Object.values(receitaPorMes).map(item => ({
-        mes: item.mes,
-        mes_ano: item.mes_ano,
-        receita: Math.round(item.receita * 100) / 100,
-        dias_hospedagem: item.dias_hospedagem,
-        total_agendamentos: item.agendamentos.size
-    })).sort((a, b) => a.mes_ano.localeCompare(b.mes_ano));
-}
-
-function calculateTopPets() {
-    const petsReceita = {};
-    
-    agendamentos.forEach(agendamento => {
-        const nome_pet = agendamento.nome_pet;
-        const dias = calculateDays(agendamento.data_inicio, agendamento.data_fim);
-        const receita = (agendamento.valor_por_dia || 0) * dias;
-        
-        if (!petsReceita[nome_pet]) {
-            petsReceita[nome_pet] = {
-                nome_pet: nome_pet,
-                receita_total: 0,
-                total_agendamentos: 0,
-                total_dias: 0
-            };
-        }
-        
-        petsReceita[nome_pet].receita_total += receita;
-        petsReceita[nome_pet].total_agendamentos += 1;
-        petsReceita[nome_pet].total_dias += dias;
-    });
-    
-    return Object.values(petsReceita)
-        .map(pet => ({
-            ...pet,
-            receita_total: Math.round(pet.receita_total * 100) / 100
-        }))
-        .sort((a, b) => b.receita_total - a.receita_total);
 }
 
 function updateSummaryCards(resumo) {
