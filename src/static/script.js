@@ -166,14 +166,16 @@ function getFirstDayOfMonth(date) {
 }
 
 function getAgendamentosForDate(date) {
-    const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    // Normalizar a data para meia-noite UTC para comparação consistente
+    const targetDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    
     return agendamentos.filter(agendamento => {
-        const inicio = new Date(agendamento.data_inicio + 'T00:00:00');
-        const fim = new Date(agendamento.data_fim + 'T00:00:00');
-        const inicioNormalized = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate());
-        const fimNormalized = new Date(fim.getFullYear(), fim.getMonth(), fim.getDate());
+        // Converter strings de data para objetos Date em UTC
+        const dataInicio = new Date(agendamento.data_inicio + 'T00:00:00.000Z');
+        const dataFim = new Date(agendamento.data_fim + 'T00:00:00.000Z');
         
-        return targetDate >= inicioNormalized && targetDate <= fimNormalized;
+        // Verificar se a data alvo está dentro do período do agendamento
+        return targetDate >= dataInicio && targetDate <= dataFim;
     });
 }
 
@@ -241,20 +243,20 @@ function createDayElement(date, dayNum, isOtherMonth = false, isToday = false) {
         dayElement.classList.add('today');
     }
     
-    // Get pets for this date
-    const petsForDate = getAgendamentosForDate(date);
+    // Get pets for this date - APENAS para dias do mês atual
+    const petsForDate = isOtherMonth ? [] : getAgendamentosForDate(date);
     const dateStr = formatDate(date);
-    const petCount = contagemDiaria[dateStr] || 0;
+    const petCount = isOtherMonth ? 0 : (contagemDiaria[dateStr] || 0);
     
-    // Add occupancy class
-    if (!isOtherMonth && !isToday) {
+    // Add occupancy class - APENAS para dias do mês atual
+    if (!isOtherMonth && !isToday && petCount > 0) {
         const occupancyClass = getOccupancyClass(petCount);
         if (occupancyClass) {
             dayElement.classList.add(occupancyClass);
         }
     }
     
-    // Add click handler for day details
+    // Add click handler for day details - APENAS para dias do mês atual
     if (!isOtherMonth) {
         dayElement.addEventListener('click', () => showDayDetails(date));
         dayElement.style.cursor = 'pointer';
@@ -266,36 +268,38 @@ function createDayElement(date, dayNum, isOtherMonth = false, isToday = false) {
     dayNumber.textContent = dayNum;
     dayElement.appendChild(dayNumber);
     
-    // Pet count badge
-    if (petCount > 0) {
+    // Pet count badge - APENAS para dias do mês atual
+    if (!isOtherMonth && petCount > 0) {
         const petCountElement = document.createElement('div');
         petCountElement.className = 'pet-count';
         petCountElement.textContent = petCount;
         dayElement.appendChild(petCountElement);
     }
     
-    // Pets list
-    const petsContainer = document.createElement('div');
-    petsContainer.className = 'day-pets';
-    
-    // Show up to 3 pets, then show "..." if more
-    const visiblePets = petsForDate.slice(0, 3);
-    visiblePets.forEach(agendamento => {
-        const petElement = document.createElement('div');
-        petElement.className = 'pet-item';
-        petElement.textContent = agendamento.nome_pet;
-        petsContainer.appendChild(petElement);
-    });
-    
-    if (petsForDate.length > 3) {
-        const moreElement = document.createElement('div');
-        moreElement.className = 'pet-item';
-        moreElement.textContent = `+${petsForDate.length - 3} mais`;
-        moreElement.style.fontStyle = 'italic';
-        petsContainer.appendChild(moreElement);
+    // Pets list - APENAS para dias do mês atual
+    if (!isOtherMonth) {
+        const petsContainer = document.createElement('div');
+        petsContainer.className = 'day-pets';
+        
+        // Show up to 3 pets, then show "..." if more
+        const visiblePets = petsForDate.slice(0, 3);
+        visiblePets.forEach(agendamento => {
+            const petElement = document.createElement('div');
+            petElement.className = 'pet-item';
+            petElement.textContent = agendamento.nome_pet;
+            petsContainer.appendChild(petElement);
+        });
+        
+        if (petsForDate.length > 3) {
+            const moreElement = document.createElement('div');
+            moreElement.className = 'pet-item';
+            moreElement.textContent = `+${petsForDate.length - 3} mais`;
+            moreElement.style.fontStyle = 'italic';
+            petsContainer.appendChild(moreElement);
+        }
+        
+        dayElement.appendChild(petsContainer);
     }
-    
-    dayElement.appendChild(petsContainer);
     
     return dayElement;
 }
