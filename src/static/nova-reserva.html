@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patudos - Nova Reserva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 25px;
+        }
+
+        .info-card h3 {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .duration-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e1e5e9;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .date-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="dashboard-cliente.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span>Voltar ao Dashboard</span>
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-paw"></i>
+                <h1>Patudos</h1>
+            </div>
+            <h2>Nova Reserva</h2>
+            <p>Selecione as datas para sua nova reserva</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            Reserva solicitada com sucesso! Aguarde a aprovação do administrador.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="errorText">Erro ao processar reserva. Tente novamente.</span>
+        </div>
+
+        <form id="reservaForm">
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Datas da Reserva</span>
+                </div>
+
+                <div class="info-card">
+                    <h3>
+                        <i class="fas fa-info-circle"></i>
+                        Informações Importantes
+                    </h3>
+                    <p>• As reservas estão sujeitas à aprovação do administrador</p>
+                    <p>• Você receberá uma confirmação por email após a aprovação</p>
+                    <p>• Recomendamos fazer a reserva com pelo menos 7 dias de antecedência</p>
+                </div>
+                
+                <div class="date-grid">
+                    <div class="form-group">
+                        <label for="checkinDate">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Data de Entrada <span class="required">*</span>
+                        </label>
+                        <input type="date" id="checkinDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkoutDate">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Data de Saída <span class="required">*</span>
+                        </label>
+                        <input type="date" id="checkoutDate" required>
+                    </div>
+                </div>
+
+                <div class="duration-display" id="durationDisplay" style="display: none;">
+                    <i class="fas fa-clock"></i>
+                    <span id="durationText">Duração: 0 dias</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="observacoes">
+                        <i class="fas fa-comment"></i>
+                        Observações (opcional)
+                    </label>
+                    <textarea id="observacoes" 
+                             style="width: 100%; padding: 15px; border: 2px solid #e1e5e9; border-radius: 12px; font-family: 'Inter', sans-serif; min-height: 100px; resize: vertical;"
+                             placeholder="Alguma observação especial para esta reserva..."></textarea>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Solicitar Reserva</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const checkinInput = document.getElementById('checkinDate');
+        const checkoutInput = document.getElementById('checkoutDate');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const durationText = document.getElementById('durationText');
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('reservaForm');
+
+        // Definir data mínima como hoje
+        const today = new Date().toISOString().split('T')[0];
+        checkinInput.min = today;
+        checkoutInput.min = today;
+
+        function calculateDuration() {
+            const checkinDate = new Date(checkinInput.value);
+            const checkoutDate = new Date(checkoutInput.value);
+
+            if (checkinInput.value && checkoutInput.value) {
+                if (checkoutDate <= checkinDate) {
+                    showError('A data de saída deve ser posterior à data de entrada.');
+                    durationDisplay.style.display = 'none';
+                    submitBtn.disabled = true;
+                    return;
+                }
+
+                const diffTime = Math.abs(checkoutDate - checkinDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                durationText.textContent = `Duração: ${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+                durationDisplay.style.display = 'block';
+                submitBtn.disabled = false;
+                hideError();
+            } else {
+                durationDisplay.style.display = 'none';
+                submitBtn.disabled = true;
+            }
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorMessage.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function showSuccess() {
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Atualizar data mínima de checkout quando checkin mudar
+        checkinInput.addEventListener('change', function() {
+            const checkinDate = new Date(this.value);
+            checkinDate.setDate(checkinDate.getDate() + 1);
+            checkoutInput.min = checkinDate.toISOString().split('T')[0];
+            
+            // Limpar checkout se for anterior ao novo checkin
+            if (checkoutInput.value && new Date(checkoutInput.value) <= new Date(this.value)) {
+                checkoutInput.value = '';
+            }
+            
+            calculateDuration();
+        });
+
+        checkoutInput.addEventListener('change', calculateDuration);
+
+        // Submissão do formulário
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const checkinDate = checkinInput.value;
+            const checkoutDate = checkoutInput.value;
+            const observacoes = document.getElementById('observacoes').value;
+
+            if (!checkinDate || !checkoutDate) {
+                showError('Por favor, preencha ambas as datas.');
+                return;
+            }
+
+            if (new Date(checkoutDate) <= new Date(checkinDate)) {
+                showError('A data de saída deve ser posterior à data de entrada.');
+                return;
+            }
+
+            // Simular envio da reserva
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            // Simular delay de envio
+            setTimeout(() => {
+                // Aqui você integrará com o Supabase para salvar a reserva
+                const reservaData = {
+                    checkinDate: checkinDate,
+                    checkoutDate: checkoutDate,
+                    observacoes: observacoes,
+                    status: 'pendente',
+                    clienteId: 'cliente_logado', // Pegar do localStorage ou sessão
+                    dataSolicitacao: new Date().toISOString()
+                };
+
+                console.log('Dados da reserva:', reservaData);
+
+                // Simular sucesso
+                showSuccess();
+                form.reset();
+                durationDisplay.style.display = 'none';
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Solicitar Reserva';
+
+                // Redirecionar após 3 segundos
+                setTimeout(() => {
+                    window.location.href = 'dashboard-cliente.html';
+                }, 3000);
+
+            }, 2000);
+        });
+
+        // Inicializar
+        calculateDuration();
+    </script>
+</body>
+</html>
