@@ -3,7 +3,7 @@ import { supabase, calculateReceitaTotal, testSupabaseConnection } from '../lib/
 // Buscar todos os agendamentos
 export async function fetchAgendamentos() {
   try {
-    console.log('🔄 Buscando agendamentos...')
+    console.log('🔄 Buscando agendamentos... (AMBIENTE DE TESTES)')
     
     // Testar conexão primeiro
     await testSupabaseConnection()
@@ -18,7 +18,7 @@ export async function fetchAgendamentos() {
       throw error
     }
     
-    console.log(`✅ ${data.length} agendamentos carregados com sucesso`)
+    console.log(`✅ ${data.length} agendamentos carregados com sucesso (AMBIENTE DE TESTES)`)
     
     // Adicionar receita_total calculada
     return data.map(agendamento => ({
@@ -44,7 +44,7 @@ export async function fetchAgendamentos() {
 // Criar novo agendamento
 export async function createAgendamento(agendamentoData) {
   try {
-    console.log('🔄 Criando novo agendamento:', agendamentoData)
+    console.log('🔄 Criando novo agendamento (AMBIENTE DE TESTES):', agendamentoData)
     
     const { data, error } = await supabase
       .from('agendamentos')
@@ -57,7 +57,7 @@ export async function createAgendamento(agendamentoData) {
       throw error
     }
     
-    console.log('✅ Agendamento criado com sucesso:', data)
+    console.log('✅ Agendamento criado com sucesso (AMBIENTE DE TESTES):', data)
     
     return {
       ...data,
@@ -72,7 +72,7 @@ export async function createAgendamento(agendamentoData) {
 // Atualizar agendamento
 export async function updateAgendamento(id, agendamentoData) {
   try {
-    console.log('🔄 Atualizando agendamento:', id, agendamentoData)
+    console.log('🔄 Atualizando agendamento (AMBIENTE DE TESTES):', id, agendamentoData)
     
     const { data, error } = await supabase
       .from('agendamentos')
@@ -86,7 +86,7 @@ export async function updateAgendamento(id, agendamentoData) {
       throw error
     }
     
-    console.log('✅ Agendamento atualizado com sucesso:', data)
+    console.log('✅ Agendamento atualizado com sucesso (AMBIENTE DE TESTES):', data)
     
     return {
       ...data,
@@ -101,7 +101,7 @@ export async function updateAgendamento(id, agendamentoData) {
 // Deletar agendamento
 export async function deleteAgendamento(id) {
   try {
-    console.log('🔄 Deletando agendamento:', id)
+    console.log('🔄 Deletando agendamento (AMBIENTE DE TESTES):', id)
     
     const { error } = await supabase
       .from('agendamentos')
@@ -113,7 +113,7 @@ export async function deleteAgendamento(id) {
       throw error
     }
     
-    console.log('✅ Agendamento deletado com sucesso')
+    console.log('✅ Agendamento deletado com sucesso (AMBIENTE DE TESTES)')
     
     return true
   } catch (error) {
@@ -125,7 +125,7 @@ export async function deleteAgendamento(id) {
 // Buscar agendamentos por data
 export async function fetchAgendamentosPorData(data) {
   try {
-    console.log('🔄 Buscando agendamentos para data:', data)
+    console.log('🔄 Buscando agendamentos para data (AMBIENTE DE TESTES):', data)
     
     const { data: agendamentos, error } = await supabase
       .from('agendamentos')
@@ -139,7 +139,7 @@ export async function fetchAgendamentosPorData(data) {
       throw error
     }
     
-    console.log(`✅ ${agendamentos.length} agendamentos encontrados para ${data}`)
+    console.log(`✅ ${agendamentos.length} agendamentos encontrados para ${data} (AMBIENTE DE TESTES)`)
     
     return agendamentos.map(agendamento => ({
       ...agendamento,

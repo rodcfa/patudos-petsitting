@@ -67,12 +67,12 @@ function hideModal() {
 // Data functions
 async function loadAgendamentos() {
     try {
-        console.log('🚀 Iniciando carregamento de agendamentos...')
+        console.log('🧪 AMBIENTE DE TESTES - Iniciando carregamento de agendamentos...')
         agendamentos = await fetchAgendamentos();
         contagemDiaria = calculateContagemDiaria(agendamentos);
-        console.log('✅ Agendamentos carregados e contagem calculada')
+        console.log('✅ Agendamentos carregados e contagem calculada (AMBIENTE DE TESTES)')
     } catch (error) {
-        console.error('❌ Erro ao carregar agendamentos:', error);
+        console.error('❌ Erro ao carregar agendamentos (AMBIENTE DE TESTES):', error);
         
         // Mostrar erro específico para o usuário
         let errorMessage = 'Erro ao carregar agendamentos. ';
@@ -103,9 +103,9 @@ async function handleCreateAgendamento(data) {
         renderCalendar();
         hideModal();
         
-        alert('Agendamento criado com sucesso!');
+        alert('Agendamento criado com sucesso! (AMBIENTE DE TESTES)');
     } catch (error) {
-        console.error('❌ Erro ao criar agendamento:', error);
+        console.error('❌ Erro ao criar agendamento (AMBIENTE DE TESTES):', error);
         alert(`Erro ao criar agendamento: ${error.message}`);
     } finally {
         hideLoading();
@@ -126,9 +126,9 @@ async function handleUpdateAgendamento(id, data) {
         renderCalendar();
         hideEditModal();
         
-        alert('Agendamento atualizado com sucesso!');
+        alert('Agendamento atualizado com sucesso! (AMBIENTE DE TESTES)');
     } catch (error) {
-        console.error('❌ Erro ao atualizar agendamento:', error);
+        console.error('❌ Erro ao atualizar agendamento (AMBIENTE DE TESTES):', error);
         alert(`Erro ao atualizar agendamento: ${error.message}`);
     } finally {
         hideLoading();
@@ -147,9 +147,9 @@ async function handleDeleteAgendamento(id) {
         hideEditModal();
         hideDayDetailsModal();
         
-        alert('Agendamento excluído com sucesso!');
+        alert('Agendamento excluído com sucesso! (AMBIENTE DE TESTES)');
     } catch (error) {
-        console.error('❌ Erro ao excluir agendamento:', error);
+        console.error('❌ Erro ao excluir agendamento (AMBIENTE DE TESTES):', error);
         alert(`Erro ao excluir agendamento: ${error.message}`);
     } finally {
         hideLoading();
@@ -400,20 +400,20 @@ document.addEventListener('keydown', (event) => {
 // Initialize app
 async function initApp() {
     try {
-        console.log('🚀 Iniciando aplicação Patudos...')
+        console.log('🧪 AMBIENTE DE TESTES - Iniciando aplicação Patudos...')
         showLoading();
         
         // Primeiro testar a conexão
-        console.log('🔍 Testando conexão com Supabase...')
+        console.log('🔍 Testando conexão com Supabase (AMBIENTE DE TESTES)...')
         await testSupabaseConnection();
         
         // Depois carregar os dados
         await loadAgendamentos();
         renderCalendar();
         
-        console.log('✅ Aplicação inicializada com sucesso!')
+        console.log('✅ Aplicação inicializada com sucesso! (AMBIENTE DE TESTES)')
     } catch (error) {
-        console.error('❌ Erro ao inicializar aplicativo:', error);
+        console.error('❌ Erro ao inicializar aplicativo (AMBIENTE DE TESTES):', error);
         
         // Mostrar erro detalhado
         const errorDiv = document.createElement('div');
@@ -432,8 +432,11 @@ async function initApp() {
         `;
         
         errorDiv.innerHTML = `
-            <h3 style="color: #dc2626; margin: 0 0 10px 0;">❌ Erro de Conexão</h3>
+            <h3 style="color: #dc2626; margin: 0 0 10px 0;">❌ Erro de Conexão (AMBIENTE DE TESTES)</h3>
             <p style="margin: 0 0 15px 0;">${error.message}</p>
+            <p style="margin: 0 0 15px 0; font-size: 14px; color: #666;">
+                <strong>Lembre-se:</strong> Este é o ambiente de testes. Configure um projeto Supabase separado.
+            </p>
             <details style="margin-top: 10px;">
                 <summary style="cursor: pointer; color: #6b7280;">Detalhes técnicos</summary>
                 <pre style="background: #f3f4f6; padding: 10px; border-radius: 4px; margin-top: 10px; font-size: 12px; overflow: auto;">${error.stack || error.message}</pre>
@@ -597,7 +600,7 @@ function confirmDeleteAgendamento(id) {
         return;
     }
     
-    const confirmMessage = `Tem certeza que deseja excluir completamente a estadia de ${agendamento.nome_pet}?\n\nEsta ação não pode ser desfeita.`;
+    const confirmMessage = `Tem certeza que deseja excluir completamente a estadia de ${agendamento.nome_pet}?\n\nEsta ação não pode ser desfeita.\n\n(AMBIENTE DE TESTES)`;
     
     if (confirm(confirmMessage)) {
         handleDeleteAgendamento(id);
@@ -741,7 +744,7 @@ async function loadDashboardData() {
         updateDetailsTable(dadosMensais);
         
     } catch (error) {
-        console.error('❌ Erro ao carregar dados do dashboard:', error);
+        console.error('❌ Erro ao carregar dados do dashboard (AMBIENTE DE TESTES):', error);
         alert('Erro ao carregar dados financeiros');
     } finally {
         hideLoading();

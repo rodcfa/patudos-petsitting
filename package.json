@@ -1,8 +1,9 @@
 {
-  "name": "patudos-petsitting",
+  "name": "patudos-petsitting-test",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Sistema de gestão para petsitting - Ambiente de Testes",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
