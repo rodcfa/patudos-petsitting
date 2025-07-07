@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patudos - Cadastro de Cliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .register-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .register-header h1 {
+            color: #1f2937;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .register-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #1f2937;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #8b5cf6;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: #8b5cf6;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .pet-section {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e5e7eb;
+            position: relative;
+        }
+
+        .pet-section.additional {
+            border-color: #8b5cf6;
+        }
+
+        .pet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .pet-title {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remove-pet-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background 0.2s ease;
+        }
+
+        .remove-pet-btn:hover {
+            background: #dc2626;
+        }
+
+        .add-pet-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem auto;
+        }
+
+        .add-pet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #6b7280;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #374151;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-message,
+        .error-message {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="login.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Voltar ao Login
+    </a>
+
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo">
+                <i class="fas fa-paw"></i>
+                <h1>Cadastro de Cliente</h1>
+            </div>
+            <p>Crie sua conta para agendar estadias para seus pets</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            Cadastro realizado com sucesso! Redirecionando para o login...
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="errorText">Erro ao realizar cadastro. Tente novamente.</span>
+        </div>
+
+        <form id="registerForm">
+            <!-- Seção Proprietário -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-user"></i>
+                    Informações Pessoais
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Nome Completo <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Senha <span class="required">*</span></label>
+                        <input type="password" id="password" name="password" required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Senha <span class="required">*</span></label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Pets -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-dog"></i>
+                    Informações dos Pets
+                </div>
+                
+                <div id="petsContainer">
+                    <!-- Primeiro pet (sempre presente) -->
+                    <div class="pet-section" data-pet-index="0">
+                        <div class="pet-header">
+                            <div class="pet-title">
+                                <i class="fas fa-paw"></i>
+                                Pet 1
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome do Pet <span class="required">*</span></label>
+                                <input type="text" name="pets[0][name]" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Raça <span class="required">*</span></label>
+                                <input type="text" name="pets[0][breed]" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Idade (anos) <span class="required">*</span></label>
+                                <input type="number" name="pets[0][age]" min="0" max="30" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Sexo <span class="required">*</span></label>
+                                <select name="pets[0][sex]" required>
+                                    <option value="">Selecione</option>
+                                    <option value="male">Macho</option>
+                                    <option value="female">Fêmea</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Peso (kg)</label>
+                                <input type="number" name="pets[0][weight]" min="0" step="0.1">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Vacinas em dia? <span class="required">*</span></label>
+                                <select name="pets[0][vaccinations_up_to_date]" required>
+                                    <option value="">Selecione</option>
+                                    <option value="true">Sim</option>
+                                    <option value="false">Não</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Sociável com outros cães?</label>
+                                <select name="pets[0][sociable_with_dogs]">
+                                    <option value="">Selecione</option>
+                                    <option value="yes">Sim</option>
+                                    <option value="no">Não</option>
+                                    <option value="depends">Depende</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Amigável com estranhos?</label>
+                                <select name="pets[0][friendly_with_strangers]">
+                                    <option value="">Selecione</option>
+                                    <option value="yes">Sim</option>
+                                    <option value="no">Não</option>
+                                    <option value="depends">Depende</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Instruções de Alimentação</label>
+                                <textarea name="pets[0][feeding_instructions]" placeholder="Tipo de ração, quantidade, horários..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Alergias ou Condições Médicas</label>
+                                <textarea name="pets[0][medical_conditions]" placeholder="Descreva alergias, medicações, condições especiais..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="add-pet-btn" onclick="addPet()">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Outro Pet
+                </button>
+            </div>
+
+            <!-- Seção Emergência -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-phone-alt"></i>
+                    Contatos de Emergência
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="emergencyContact">Contato de Emergência <span class="required">*</span></label>
+                        <textarea id="emergencyContact" name="emergency_contact" required placeholder="Nome e telefone de contato de emergência"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="veterinarian">Veterinário de Referência <span class="required">*</span></label>
+                        <textarea id="veterinarian" name="veterinarian" required placeholder="Nome, clínica e telefone do veterinário"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="authorizeEmergencyCare">Autoriza cuidados veterinários de emergência? <span class="required">*</span></label>
+                        <select id="authorizeEmergencyCare" name="authorize_emergency_care" required>
+                            <option value="">Selecione</option>
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="additionalComments">Observações Adicionais</label>
+                        <textarea id="additionalComments" name="additional_comments" placeholder="Qualquer informação adicional importante..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-user-plus"></i>
+                    Criar Conta
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script type="module" src="register-script.js"></script>
+</body>
+</html>

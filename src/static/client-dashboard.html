@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patudos - Dashboard Cliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .client-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .client-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #10b981;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .recent-bookings {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .booking-item:hover {
+            border-color: #10b981;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-paw"></i>
+                    <h1>Patudos <span class="test-badge">CLIENTE</span></h1>
+                </div>
+                <div class="header-nav">
+                    <button class="btn btn-secondary active">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='client-bookings.html'">
+                        <i class="fas fa-calendar"></i>
+                        Minhas Reservas
+                    </button>
+                </div>
+                <div class="header-actions">
+                    <span id="clientName">Carregando...</span>
+                    <button class="btn btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="client-header">
+                <h1><i class="fas fa-user"></i> Bem-vindo ao seu Dashboard</h1>
+                <p>Gerencie suas reservas e acompanhe seus pets</p>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="client-stats">
+                <div class="stat-card">
+                    <h3>Reservas Ativas</h3>
+                    <div class="stat-number" id="activeBookings">0</div>
+                    <p>Em andamento ou aprovadas</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Reservas Pendentes</h3>
+                    <div class="stat-number" id="pendingBookings">0</div>
+                    <p>Aguardando aprovação</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pets Cadastrados</h3>
+                    <div class="stat-number" id="totalPets">0</div>
+                    <p>Registrados na conta</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total de Estadias</h3>
+                    <div class="stat-number" id="totalStays">0</div>
+                    <p>Histórico completo</p>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="quick-actions">
+                <a href="new-booking.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <h3>Nova Reserva</h3>
+                    <p>Solicitar nova estadia</p>
+                </a>
+
+                <a href="my-pets.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-dog"></i>
+                    </div>
+                    <h3>Meus Pets</h3>
+                    <p>Gerenciar informações</p>
+                </a>
+
+                <a href="client-bookings.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Minhas Reservas</h3>
+                    <p>Ver histórico completo</p>
+                </a>
+
+                <a href="profile.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <h3>Meu Perfil</h3>
+                    <p>Atualizar dados</p>
+                </a>
+            </div>
+
+            <!-- Reservas Recentes -->
+            <div class="recent-bookings">
+                <h2><i class="fas fa-clock"></i> Reservas Recentes</h2>
+                <div id="recentBookingsList">
+                    <!-- Será preenchido via JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Spinner -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script type="module" src="client-script.js"></script>
+</body>
+</html>
