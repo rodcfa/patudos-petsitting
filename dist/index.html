@@ -7,20 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Redirect to login page if not logged in
-        window.onload = function() {
-            // Check if user is logged in
-            const isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-            const isClientLoggedIn = localStorage.getItem('clientLoggedIn') === 'true';
-            
-            // If not logged in, redirect to login page
-            if (!isAdminLoggedIn && !isClientLoggedIn) {
-                window.location.href = 'login.html';
-            }
-        }
-    </script>
-  <script type="module" crossorigin src="/assets/index-Dp5dA9p0.js"></script>
+  <script type="module" crossorigin src="/assets/index-QIHqFfnS.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-BaNqILC4.css">
 </head>
 <body>
@@ -44,8 +31,8 @@
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-primary" id="addClientBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sair
+                        <i class="fas fa-plus"></i>
+                        Adicionar Cliente
                     </button>
                 </div>
             </div>
