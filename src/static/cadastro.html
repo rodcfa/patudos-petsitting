@@ -946,52 +946,8 @@
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Coletar todos os dados do formulário
-            const formData = new FormData(this);
-            const data = {};
-            
-            // Dados do proprietário
-            data.owner = {
-                name: formData.get('ownerName') || document.getElementById('ownerName').value,
-                phone: formData.get('ownerPhone') || document.getElementById('ownerPhone').value,
-                email: formData.get('ownerEmail') || document.getElementById('ownerEmail').value
-            };
-            
-            // Dados da estadia
-            data.stay = {
-                checkinDate: document.getElementById('checkinDate').value,
-                checkoutDate: document.getElementById('checkoutDate').value,
-                pickupTime: document.getElementById('pickupTime').value
-            };
-            
-            // Dados dos cães
-            data.dogs = [];
-            document.querySelectorAll('.dog-section').forEach((section, index) => {
-                const dog = {};
-                section.querySelectorAll('input, select, textarea').forEach(field => {
-                    if (field.name) {
-                        dog[field.name] = field.value;
-                    }
-                });
-                data.dogs.push(dog);
-            });
-            
-            // Dados de emergência
-            data.emergency = {
-                contact: document.getElementById('emergencyContact').value,
-                veterinarian: document.getElementById('veterinarian').value,
-                authorizeEmergencyCare: document.getElementById('authorizeEmergencyCare').value,
-                additionalComments: document.getElementById('additionalComments').value
-            };
-            
-            console.log('Registration data:', data);
-            
-            // Aqui você integrará com o Supabase
-            alert(currentLanguage === 'pt' ? 
-                'Cadastro realizado com sucesso! Redirecionando...' : 
-                'Registration completed successfully! Redirecting...');
-            
-            // Redirecionar para login ou dashboard
+            // Simular cadastro bem-sucedido
+            alert('Cadastro realizado com sucesso! Redirecionando para o login...');
             window.location.href = 'login.html';
         });
 
