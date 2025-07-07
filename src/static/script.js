@@ -50,6 +50,12 @@ const mainContent = document.querySelector('.main-content');
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Patudos PetSitting - Ambiente de Testes Iniciado');
     
+    // Verificar se está logado antes de inicializar
+    if (!isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
     // Verificar conexão com Supabase
     if (!supabaseUrl || !supabaseKey) {
         console.error('Credenciais do Supabase não encontradas!');
@@ -62,6 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar aplicação
     initializeApp();
 });
+
+function isLoggedIn() {
+    return localStorage.getItem('adminLoggedIn') === 'true';
+}
 
 async function initializeApp() {
     try {
@@ -658,6 +668,7 @@ function showLoading(show) {
 
 // Funções globais para uso nos event handlers inline
 window.editAgendamento = editAgendamento;
+window.logout = logout;
 window.deleteAgendamento = async function(id) {
     if (!confirm('Tem certeza que deseja excluir este agendamento?')) {
         return;
@@ -688,3 +699,11 @@ window.deleteAgendamento = async function(id) {
         alert('Erro ao excluir agendamento. Tente novamente.');
     }
 };
+
+function logout() {
+    if (confirm('Tem certeza que deseja sair?')) {
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminUser');
+        window.location.href = 'login.html';
+    }
+}

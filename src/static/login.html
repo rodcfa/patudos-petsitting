@@ -225,12 +225,12 @@
             
             <div class="form-group">
                 <label for="username">Usuário:</label>
-                <input type="text" id="username" name="username" required value="RC-adm">
+                <input type="text" id="username" name="username" required placeholder="RC-adm">
             </div>
             
             <div class="form-group">
                 <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required placeholder="Digite sua senha">
             </div>
             
             <button type="submit" class="submit-btn" id="submitBtn">
@@ -272,7 +272,7 @@
                 
                 // Redirecionar para o calendário
                 setTimeout(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'index.html'; // Vai para o calendário após login
                 }, 1000);
                 
             } else {
@@ -283,9 +283,7 @@
         });
 
         // Verificar se já está logado
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            window.location.href = 'index.html';
-        }
+        // Removido - agora sempre mostra a tela de login primeiro
     </script>
 </body>
 </html>

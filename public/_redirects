@@ -1,1 +1,3 @@
-/*    /index.html   200
+# Redirecionar todas as rotas para login.html como página inicial
+/    /login.html   200
+/*   /login.html   200
