@@ -189,10 +189,37 @@ async function handleFormSubmit(e) {
         
         console.log('Iniciando processo de registro...');
         
-        // Preparar dados do usuário
+        // Usar Supabase Auth para criar usuário
+        const email = formData.get('email');
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                emailRedirectTo: `${window.location.origin}/login.html`
+            }
+        });
+        
+        if (authError) {
+            console.error('Erro na autenticação:', authError);
+            
+            // Tratar erros específicos do Supabase Auth
+            if (authError.message.includes('User already registered')) {
+                throw new Error('Este email já está cadastrado. Tente fazer login.');
+            } else if (authError.message.includes('Invalid email')) {
+                throw new Error('Email inválido. Verifique o formato do email.');
+            } else if (authError.message.includes('Password should be at least')) {
+                throw new Error('A senha deve ter pelo menos 6 caracteres.');
+            }
+            
+            throw new Error(`Erro ao criar conta: ${authError.message}`);
+        }
+        
+        console.log('Usuário criado no Auth:', authData);
+        
+        // Preparar dados do perfil do usuário
         const userData = {
-            email: formData.get('email'),
-            password_hash: await hashPassword(password),
+            id: authData.user.id,
+            email: email,
             role: 'client',
             name: formData.get('name'),
             phone: formData.get('phone') || null,
@@ -202,40 +229,29 @@ async function handleFormSubmit(e) {
             additional_comments: formData.get('additional_comments') || null
         };
         
-        console.log('Dados do usuário preparados:', { ...userData, password_hash: '[HIDDEN]' });
+        console.log('Dados do usuário preparados:', userData);
         
-        // Verificar se email já existe
-        const { data: existingUser, error: checkError } = await supabase
-            .from('users')
-            .select('id')
-            .eq('email', userData.email)
-            .single();
-        
-        if (checkError && checkError.code !== 'PGRST116') {
-            // PGRST116 é "not found", que é o que queremos
-            console.error('Erro ao verificar email existente:', checkError);
-            throw new Error('Erro ao verificar email. Tente novamente.');
-        }
-        
-        if (existingUser && !checkError) {
-            throw new Error('Este email já está cadastrado');
-        }
-        
-        console.log('Email disponível, criando usuário...');
-        
-        // Criar usuário
+        // Criar perfil do usuário na tabela users
         const { data: user, error: userError } = await supabase
             .from('users')
-            .insert([userData])
-            .select()
+            .insert(userData)
+            .select('*')
             .single();
         
         if (userError) {
-            console.error('Erro ao criar usuário:', userError);
-            throw new Error(`Erro ao criar conta: ${userError.message}`);
+            console.error('Erro ao criar perfil do usuário:', userError);
+            
+            // Se falhou ao criar o perfil, tentar deletar o usuário do Auth
+            try {
+                await supabase.auth.admin.deleteUser(authData.user.id);
+            } catch (cleanupError) {
+                console.error('Erro ao limpar usuário do Auth:', cleanupError);
+            }
+            
+            throw new Error(`Erro ao criar perfil: ${userError.message}`);
         }
         
-        console.log('Usuário criado:', user);
+        console.log('Perfil do usuário criado:', user);
         
         // Preparar dados dos pets
         const pets = [];
@@ -265,9 +281,13 @@ async function handleFormSubmit(e) {
         if (pets.length > 0) {
             const { error: petsError } = await supabase
                 .from('pets')
-                .insert(pets);
+                .insert(pets)
+                .select('id');
             
-            if (petsError) throw petsError;
+            if (petsError) {
+                console.error('Erro ao criar pets:', petsError);
+                throw new Error(`Erro ao cadastrar pets: ${petsError.message}`);
+            }
             
             console.log('Pets criados:', pets.length);
         }
@@ -286,19 +306,19 @@ async function handleFormSubmit(e) {
     } catch (error) {
         console.error('Erro ao criar conta:', error);
         showLoading(false);
-        showError(error.message || 'Erro desconhecido ao criar conta');
+        
+        // Mensagens de erro mais amigáveis
+        let errorMessage = error.message;
+        if (errorMessage.includes('duplicate key value')) {
+            errorMessage = 'Este email já está cadastrado. Tente fazer login ou use outro email.';
+        } else if (errorMessage.includes('violates row-level security')) {
+            errorMessage = 'Erro de permissão. Tente novamente em alguns instantes.';
+        } else if (errorMessage.includes('Failed to fetch')) {
+            errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
+        }
+        
+        showError(errorMessage || 'Erro desconhecido ao criar conta');
     }
-}
-
-async function hashPassword(password) {
-    // Em produção, isso deve ser feito no backend com bcrypt
-    // Por enquanto, usar uma hash simples para demonstração
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hash = await crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(hash))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
 }
 
 function showLoading(show) {
