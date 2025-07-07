@@ -109,6 +109,10 @@ function setupEventListeners() {
         renderCalendar();
     });
     
+    // Logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', logout);
+    
     // Modal de adicionar cliente
     addClientBtn.addEventListener('click', () => {
         openModal();
@@ -672,7 +676,6 @@ function showLoading(show) {
 
 // Funções globais para uso nos event handlers inline
 window.editAgendamento = editAgendamento;
-window.logout = logout;
 window.deleteAgendamento = async function(id) {
     if (!confirm('Tem certeza que deseja excluir este agendamento?')) {
         return;
