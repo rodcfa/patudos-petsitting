@@ -25,11 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setupEventListeners() {
-    registerForm.addEventListener('submit', handleFormSubmit);
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleFormSubmit);
+    }
     
     // Validação de senha em tempo real
-    document.getElementById('confirmPassword').addEventListener('input', validatePasswords);
-    document.getElementById('password').addEventListener('input', validatePasswords);
+    const confirmPassword = document.getElementById('confirmPassword');
+    const password = document.getElementById('password');
+    
+    if (confirmPassword && password) {
+        confirmPassword.addEventListener('input', validatePasswords);
+        password.addEventListener('input', validatePasswords);
+    }
 }
 
 function validatePasswords() {
@@ -133,7 +140,9 @@ function addPet() {
         </div>
     `;
     
-    petsContainer.appendChild(petSection);
+    if (petsContainer) {
+        petsContainer.appendChild(petSection);
+    }
 }
 
 function removePet(button) {
@@ -181,7 +190,7 @@ async function handleFormSubmit(e) {
         // Preparar dados do usuário
         const userData = {
             email: formData.get('email'),
-            password_hash: await hashPassword(password), // Em produção, usar bcrypt no backend
+            password_hash: await hashPassword(password),
             role: 'client',
             name: formData.get('name'),
             phone: formData.get('phone') || null,
@@ -275,6 +284,8 @@ async function hashPassword(password) {
 }
 
 function showLoading(show) {
+    if (!loadingOverlay || !submitBtn) return;
+    
     if (show) {
         loadingOverlay.classList.add('active');
         submitBtn.disabled = true;
@@ -287,19 +298,33 @@ function showLoading(show) {
 }
 
 function showSuccess() {
-    successMessage.style.display = 'block';
-    errorMessage.style.display = 'none';
+    if (successMessage) {
+        successMessage.style.display = 'block';
+    }
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
 }
 
 function showError(message) {
-    errorText.textContent = message;
-    errorMessage.style.display = 'block';
-    successMessage.style.display = 'none';
+    if (errorText) {
+        errorText.textContent = message;
+    }
+    if (errorMessage) {
+        errorMessage.style.display = 'block';
+    }
+    if (successMessage) {
+        successMessage.style.display = 'none';
+    }
 }
 
 function hideMessages() {
-    successMessage.style.display = 'none';
-    errorMessage.style.display = 'none';
+    if (successMessage) {
+        successMessage.style.display = 'none';
+    }
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
 }
 
 // Funções globais

@@ -26,13 +26,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setupEventListeners() {
-    loginForm.addEventListener('submit', handleLogin);
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
 }
 
 function checkExistingLogin() {
     // Verificar se já está logado como admin
     if (localStorage.getItem('adminLoggedIn') === 'true') {
-        window.location.href = 'admin-dashboard.html';
+        window.location.href = 'index.html';
         return;
     }
     
@@ -49,21 +51,10 @@ function showClientLogin() {
     loginForm.style.display = 'block';
     
     // Atualizar placeholder e labels para cliente
-    document.querySelector('label[for="email"]').textContent = 'Email:';
-    document.querySelector('label[for="password"]').textContent = 'Senha:';
+    document.querySelector('label[for="username"]').textContent = 'Email:';
+    document.getElementById('username').type = 'email';
+    document.getElementById('username').placeholder = 'seu@email.com';
     submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar como Cliente';
-    
-    // Adicionar botão de voltar
-    if (!document.getElementById('backBtn')) {
-        const backBtn = document.createElement('button');
-        backBtn.type = 'button';
-        backBtn.id = 'backBtn';
-        backBtn.className = 'login-btn secondary';
-        backBtn.style.marginTop = '1rem';
-        backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Voltar';
-        backBtn.onclick = showLoginOptions;
-        loginForm.appendChild(backBtn);
-    }
 }
 
 function showAdminLogin() {
@@ -72,43 +63,20 @@ function showAdminLogin() {
     loginForm.style.display = 'block';
     
     // Atualizar placeholder e labels para admin
-    document.querySelector('label[for="email"]').textContent = 'Usuário:';
-    document.querySelector('label[for="password"]').textContent = 'Senha:';
-    document.getElementById('email').type = 'text';
-    document.getElementById('email').placeholder = 'RC-adm';
+    document.querySelector('label[for="username"]').textContent = 'Usuário:';
+    document.getElementById('username').type = 'text';
+    document.getElementById('username').placeholder = 'Usuário do administrador';
     submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Entrar como Admin';
-    
-    // Adicionar botão de voltar
-    if (!document.getElementById('backBtn')) {
-        const backBtn = document.createElement('button');
-        backBtn.type = 'button';
-        backBtn.id = 'backBtn';
-        backBtn.className = 'login-btn secondary';
-        backBtn.style.marginTop = '1rem';
-        backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Voltar';
-        backBtn.onclick = showLoginOptions;
-        loginForm.appendChild(backBtn);
-    }
 }
 
 function showLoginOptions() {
     currentLoginType = null;
-    loginForm.style.display = 'none';
-    loginOptions.style.display = 'flex';
+    if (loginForm) loginForm.style.display = 'none';
+    if (loginOptions) loginOptions.style.display = 'flex';
     
     // Resetar formulário
-    loginForm.reset();
+    if (loginForm) loginForm.reset();
     hideError();
-    
-    // Remover botão de voltar
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-        backBtn.remove();
-    }
-    
-    // Resetar campos
-    document.getElementById('email').type = 'email';
-    document.getElementById('email').placeholder = '';
 }
 
 async function handleLogin(e) {
@@ -119,29 +87,29 @@ async function handleLogin(e) {
         hideError();
         
         const formData = new FormData(loginForm);
-        const email = formData.get('email');
+        const username = formData.get('username');
         const password = formData.get('password');
         
         if (currentLoginType === 'admin') {
-            // Login de administrador
-            if (email === 'RC-adm' && password === 'Gotzen1154!') {
+            // Login de administrador - credenciais hardcoded para segurança
+            if (username === 'RC-adm' && password === 'Gotzen1154!') {
                 localStorage.setItem('adminLoggedIn', 'true');
                 localStorage.setItem('adminUser', 'RC-adm');
                 
                 showLoading(false);
-                window.location.href = 'admin-dashboard.html';
+                window.location.href = 'index.html';
                 return;
             } else {
                 throw new Error('Credenciais de administrador inválidas');
             }
         } else if (currentLoginType === 'client') {
-            // Login de cliente
+            // Login de cliente via Supabase
             const hashedPassword = await hashPassword(password);
             
             const { data: user, error } = await supabase
                 .from('users')
                 .select('*')
-                .eq('email', email)
+                .eq('email', username)
                 .eq('password_hash', hashedPassword)
                 .eq('role', 'client')
                 .single();
@@ -179,6 +147,8 @@ async function hashPassword(password) {
 }
 
 function showLoading(show) {
+    if (!loadingOverlay || !submitBtn) return;
+    
     if (show) {
         loadingOverlay.classList.add('active');
         submitBtn.disabled = true;
@@ -195,12 +165,16 @@ function showLoading(show) {
 }
 
 function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.style.display = 'block';
+    if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
 }
 
 function hideError() {
-    errorMessage.style.display = 'none';
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
 }
 
 // Funções globais

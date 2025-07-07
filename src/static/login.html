@@ -82,9 +82,47 @@
             line-height: 1.5;
         }
 
+        .login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn.secondary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .login-btn.admin {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
         .login-form {
             text-align: left;
             margin-bottom: 2rem;
+            display: none;
         }
 
         .form-group {
@@ -148,14 +186,19 @@
             display: none;
         }
 
-        .register-link {
-            color: #8b5cf6;
-            text-decoration: none;
-            font-weight: 500;
+        .back-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 1rem;
         }
 
-        .register-link:hover {
-            text-decoration: underline;
+        .back-btn:hover {
+            background: #4b5563;
         }
 
         .divider {
@@ -181,16 +224,6 @@
             font-size: 0.875rem;
         }
 
-        .admin-info {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-            color: #1e40af;
-        }
-
         @media (max-width: 480px) {
             .login-container {
                 padding: 30px 20px;
@@ -214,70 +247,59 @@
             <p>Faça login para acessar o calendário de agendamentos</p>
         </div>
 
+        <!-- Opções de Login -->
+        <div class="login-options" id="loginOptions">
+            <button class="login-btn" onclick="showClientLogin()">
+                <i class="fas fa-user"></i>
+                Login Cliente
+            </button>
+
+            <button class="login-btn admin" onclick="showAdminLogin()">
+                <i class="fas fa-shield-alt"></i>
+                Acesso Administrador
+            </button>
+
+            <div class="divider">
+                <span>ou</span>
+            </div>
+
+            <a href="register.html" class="login-btn secondary">
+                <i class="fas fa-user-plus"></i>
+                Criar Nova Conta
+            </a>
+        </div>
+
+        <!-- Formulário de Login -->
         <form class="login-form" id="loginForm">
             <div class="error-message" id="errorMessage"></div>
             
             <div class="form-group">
-                <label for="username">Usuário:</label>
-                <input type="text" id="username" name="username" required placeholder="Digite seu usuário">
+                <label for="username" id="usernameLabel">Usuário:</label>
+                <input type="text" id="username" name="username" required placeholder="RC-adm">
             </div>
             
             <div class="form-group">
                 <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                <input type="password" id="password" name="password" required placeholder="••••••••••">
             </div>
             
             <button type="submit" class="submit-btn" id="submitBtn">
                 <i class="fas fa-sign-in-alt"></i>
                 Entrar
             </button>
+
+            <button type="button" class="back-btn" onclick="showLoginOptions()">
+                <i class="fas fa-arrow-left"></i>
+                Voltar
+            </button>
         </form>
-
-        <div class="divider">
-            <span>ou</span>
-        </div>
-
-        <div style="font-size: 0.875rem; color: #6b7280;">
-            <p>Novo cliente? <a href="register.html" class="register-link">Cadastre-se aqui</a></p>
-        </div>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            // Limpar mensagem de erro
-            errorMessage.style.display = 'none';
-            
-            // Verificar credenciais do administrador
-            if (username === 'RC-adm' && password === 'Gotzen1154!') {
-                // Login bem-sucedido
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-                
-                // Salvar estado de login
-                localStorage.setItem('adminLoggedIn', 'true');
-                localStorage.setItem('adminUser', 'RC-adm');
-                
-                // Redirecionar para o calendário
-                setTimeout(() => {
-                    window.location.href = 'index.html'; // Vai para o calendário após login
-                }, 1000);
-                
-            } else {
-                // Credenciais inválidas
-                errorMessage.textContent = 'Credenciais inválidas. Verifique o usuário e senha.';
-                errorMessage.style.display = 'block';
-            }
-        });
+    <!-- Loading Spinner -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
 
-        // Verificar se já está logado
-        // Removido - agora sempre mostra a tela de login primeiro
-    </script>
+    <script type="module" src="login-script.js"></script>
 </body>
 </html>
