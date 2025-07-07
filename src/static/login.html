@@ -82,167 +82,113 @@
             line-height: 1.5;
         }
 
-        .login-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .login-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .login-btn.secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .login-btn.admin {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .login-btn i {
-            font-size: 1.2rem;
-        }
-
-        .language-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 25px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .language-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .footer-text {
-            margin-top: 30px;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            animation: modalSlide 0.3s ease-out;
-        }
-
-        @keyframes modalSlide {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .close:hover {
-            color: #333;
+        .login-form {
+            text-align: left;
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s ease;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 100%;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
             transition: all 0.3s ease;
         }
 
         .submit-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .error-message {
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-top: 10px;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
             display: none;
+        }
+
+        .register-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            margin: 1.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .admin-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: #1e40af;
         }
 
         @media (max-width: 480px) {
@@ -253,18 +199,10 @@
             .logo h1 {
                 font-size: 2rem;
             }
-            
-            .welcome-text h2 {
-                font-size: 1.5rem;
-            }
         }
     </style>
 </head>
 <body>
-    <button class="language-toggle" onclick="toggleLanguage()">
-        <i class="fas fa-globe"></i> EN
-    </button>
-
     <div class="login-container">
         <div class="logo">
             <i class="fas fa-paw"></i>
@@ -272,208 +210,81 @@
         </div>
 
         <div class="welcome-text">
-            <h2 id="welcomeTitle">Bem-vindo ao Patudos</h2>
-            <p id="welcomeSubtitle">Sistema de gestão para petsitting profissional</p>
+            <h2>Acesso ao Sistema</h2>
+            <p>Faça login para acessar o calendário de agendamentos</p>
         </div>
 
-        <div class="login-options">
-            <a href="cadastro.html" class="login-btn">
-                <i class="fas fa-user-plus"></i>
-                <span id="createAccountText">Criar Conta</span>
-            </a>
+        <div class="admin-info">
+            <strong>Acesso Administrador:</strong><br>
+            Usuário: <code>RC-adm</code><br>
+            Senha: <code>Gotzen1154!</code>
+        </div>
 
-            <button class="login-btn secondary" onclick="openClientLogin()">
+        <form class="login-form" id="loginForm">
+            <div class="error-message" id="errorMessage"></div>
+            
+            <div class="form-group">
+                <label for="username">Usuário:</label>
+                <input type="text" id="username" name="username" required value="RC-adm">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">
                 <i class="fas fa-sign-in-alt"></i>
-                <span id="clientLoginText">Login Cliente</span>
+                Entrar
             </button>
+        </form>
 
-            <button class="login-btn admin" onclick="openAdminLogin()">
-                <i class="fas fa-user-shield"></i>
-                <span id="adminLoginText">Acesso Administrador</span>
-            </button>
+        <div class="divider">
+            <span>ou</span>
         </div>
 
-        <div class="footer-text">
-            <p id="footerText">© 2025 Patudos. Todos os direitos reservados.</p>
-        </div>
-    </div>
-
-    <!-- Modal Login Cliente -->
-    <div id="clientModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('clientModal')">&times;</span>
-            <h3 id="clientModalTitle">Login Cliente</h3>
-            <form id="clientLoginForm">
-                <div class="form-group">
-                    <label for="clientEmail" id="emailLabel">Email:</label>
-                    <input type="email" id="clientEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="clientPassword" id="passwordLabel">Palavra-passe:</label>
-                    <input type="password" id="clientPassword" required>
-                </div>
-                <button type="submit" class="submit-btn" id="loginButton">Entrar</button>
-                <div class="error-message" id="clientError"></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Login Administrador -->
-    <div id="adminModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('adminModal')">&times;</span>
-            <h3 id="adminModalTitle">Acesso Administrador</h3>
-            <form id="adminLoginForm">
-                <div class="form-group">
-                    <label for="adminUser" id="userLabel">Utilizador:</label>
-                    <input type="text" id="adminUser" required>
-                </div>
-                <div class="form-group">
-                    <label for="adminPassword" id="adminPasswordLabel">Palavra-passe:</label>
-                    <input type="password" id="adminPassword" required>
-                </div>
-                <button type="submit" class="submit-btn" id="adminLoginButton">Entrar como Admin</button>
-                <div class="error-message" id="adminError"></div>
-            </form>
+        <div style="font-size: 0.875rem; color: #6b7280;">
+            <p>Novo cliente? <a href="register.html" class="register-link">Cadastre-se aqui</a></p>
         </div>
     </div>
 
     <script>
-        let currentLanguage = 'pt';
-
-        const translations = {
-            pt: {
-                welcomeTitle: 'Bem-vindo ao Patudos',
-                welcomeSubtitle: 'Sistema de gestão para petsitting profissional',
-                createAccountText: 'Criar Conta',
-                clientLoginText: 'Login Cliente',
-                adminLoginText: 'Acesso Administrador',
-                footerText: '© 2025 Patudos. Todos os direitos reservados.',
-                clientModalTitle: 'Login Cliente',
-                adminModalTitle: 'Acesso Administrador',
-                emailLabel: 'Email:',
-                passwordLabel: 'Palavra-passe:',
-                userLabel: 'Utilizador:',
-                adminPasswordLabel: 'Palavra-passe:',
-                loginButton: 'Entrar',
-                adminLoginButton: 'Entrar como Admin'
-            },
-            en: {
-                welcomeTitle: 'Welcome to Patudos',
-                welcomeSubtitle: 'Professional petsitting management system',
-                createAccountText: 'Create Account',
-                clientLoginText: 'Client Login',
-                adminLoginText: 'Administrator Access',
-                footerText: '© 2025 Patudos. All rights reserved.',
-                clientModalTitle: 'Client Login',
-                adminModalTitle: 'Administrator Access',
-                emailLabel: 'Email:',
-                passwordLabel: 'Password:',
-                userLabel: 'Username:',
-                adminPasswordLabel: 'Password:',
-                loginButton: 'Login',
-                adminLoginButton: 'Login as Admin'
-            }
-        };
-
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === 'pt' ? 'en' : 'pt';
-            updateLanguage();
-            
-            const langBtn = document.querySelector('.language-toggle');
-            langBtn.innerHTML = `<i class="fas fa-globe"></i> ${currentLanguage === 'pt' ? 'EN' : 'PT'}`;
-        }
-
-        function updateLanguage() {
-            const texts = translations[currentLanguage];
-            
-            Object.keys(texts).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.textContent = texts[key];
-                }
-            });
-        }
-
-        function openClientLogin() {
-            document.getElementById('clientModal').style.display = 'block';
-        }
-
-        function openAdminLogin() {
-            document.getElementById('adminModal').style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            // Limpar formulários
-            document.getElementById('clientLoginForm').reset();
-            document.getElementById('adminLoginForm').reset();
-            // Esconder mensagens de erro
-            document.getElementById('clientError').style.display = 'none';
-            document.getElementById('adminError').style.display = 'none';
-        }
-
-        // Fechar modal clicando fora
-        window.onclick = function(event) {
-            const clientModal = document.getElementById('clientModal');
-            const adminModal = document.getElementById('adminModal');
-            
-            if (event.target === clientModal) {
-                closeModal('clientModal');
-            }
-            if (event.target === adminModal) {
-                closeModal('adminModal');
-            }
-        }
-
-        // Login Cliente
-        document.getElementById('clientLoginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('clientEmail').value;
-            const password = document.getElementById('clientPassword').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const submitBtn = document.getElementById('submitBtn');
             
-            // Aqui você integrará com o Supabase para autenticação
-            console.log('Client login attempt:', { email, password });
-            
-            // Simulação - remover quando integrar com Supabase
-            if (email && password) {
-                // Redirecionar para dashboard do cliente
-                window.location.href = 'dashboard-cliente.html';
-            } else {
-                showError('clientError', 'Por favor, preencha todos os campos.');
-            }
-        });
-
-        // Login Administrador
-        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('adminUser').value;
-            const password = document.getElementById('adminPassword').value;
+            // Limpar mensagem de erro
+            errorMessage.style.display = 'none';
             
             // Verificar credenciais do administrador
             if (username === 'RC-adm' && password === 'Gotzen1154!') {
-                // Login bem-sucedido - redirecionar para dashboard admin
+                // Login bem-sucedido
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+                
+                // Salvar estado de login
                 localStorage.setItem('adminLoggedIn', 'true');
-                window.location.href = 'dashboard-admin.html'; // Dashboard admin específico
+                localStorage.setItem('adminUser', 'RC-adm');
+                
+                // Redirecionar para o calendário
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+                
             } else {
-                showError('adminError', currentLanguage === 'pt' ? 
-                    'Credenciais inválidas. Tente novamente.' : 
-                    'Invalid credentials. Please try again.');
+                // Credenciais inválidas
+                errorMessage.textContent = 'Credenciais inválidas. Verifique o usuário e senha.';
+                errorMessage.style.display = 'block';
             }
         });
 
-        function showError(elementId, message) {
-            const errorElement = document.getElementById(elementId);
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        // Verificar se já está logado como admin
+        // Verificar se já está logado
         if (localStorage.getItem('adminLoggedIn') === 'true') {
-            // Mostrar opção de ir direto para dashboard
-            console.log('Admin already logged in');
+            window.location.href = 'index.html';
         }
     </script>
 </body>

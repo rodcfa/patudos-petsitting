@@ -48,7 +48,7 @@ const mainContent = document.querySelector('.main-content');
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Patudos PetSitting - Iniciado');
+    console.log('Patudos PetSitting - Ambiente de Testes Iniciado');
     
     // Verificar conexão com Supabase
     if (!supabaseUrl || !supabaseKey) {
@@ -59,15 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Conectado ao Supabase:', supabaseUrl);
     
-    // Verificar se o usuário está logado
-    const isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-    const isClientLoggedIn = localStorage.getItem('clientLoggedIn') === 'true';
-    
-    if (!isAdminLoggedIn && !isClientLoggedIn) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
     // Inicializar aplicação
     initializeApp();
 });
@@ -75,9 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
 async function initializeApp() {
     try {
         showLoading(true);
-        
-        // Configurar botão de sair
-        setupLogoutButton();
         
         // Carregar agendamentos
         await loadAgendamentos();
@@ -98,16 +86,6 @@ async function initializeApp() {
     }
 }
 
-function setupLogoutButton() {
-    const addClientBtn = document.getElementById('addClientBtn');
-    addClientBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sair';
-    addClientBtn.addEventListener('click', () => {
-        localStorage.removeItem('adminLoggedIn');
-        localStorage.removeItem('clientLoggedIn');
-        window.location.href = 'login.html';
-    });
-}
-
 function setupEventListeners() {
     // Navegação do calendário
     prevMonthBtn.addEventListener('click', () => {
@@ -120,6 +98,11 @@ function setupEventListeners() {
         renderCalendar();
     });
     
+    // Modal de adicionar cliente
+    addClientBtn.addEventListener('click', () => {
+        openModal();
+    });
+    
     closeModal.addEventListener('click', () => {
         closeModalOverlay();
     });
@@ -127,6 +110,7 @@ function setupEventListeners() {
     cancelBtn.addEventListener('click', () => {
         closeModalOverlay();
     });
+    
     // Modal de detalhes do dia
     closeDayDetailsModal.addEventListener('click', () => {
         closeDayDetails();
