@@ -42,6 +42,7 @@ const deleteAgendamentoBtn = document.getElementById('deleteAgendamentoBtn');
 
 // Elementos de navegação
 const calendarViewBtn = document.getElementById('calendarViewBtn');
+const adminPanelBtn = document.getElementById('adminPanelBtn');
 const dashboardViewBtn = document.getElementById('dashboardViewBtn');
 const dashboardSection = document.getElementById('dashboardSection');
 const mainContent = document.querySelector('.main-content');
@@ -142,6 +143,9 @@ function setupEventListeners() {
     
     // Navegação entre views
     calendarViewBtn.addEventListener('click', () => switchView('calendar'));
+    adminPanelBtn.addEventListener('click', () => {
+        window.location.href = 'admin-dashboard.html';
+    });
     dashboardViewBtn.addEventListener('click', () => switchView('dashboard'));
     
     // Fechar modais clicando fora
