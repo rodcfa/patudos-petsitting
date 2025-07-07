@@ -187,6 +187,8 @@ async function handleFormSubmit(e) {
             throw new Error('A senha deve ter pelo menos 6 caracteres');
         }
         
+        console.log('Iniciando processo de registro...');
+        
         // Preparar dados do usuário
         const userData = {
             email: formData.get('email'),
@@ -200,16 +202,26 @@ async function handleFormSubmit(e) {
             additional_comments: formData.get('additional_comments') || null
         };
         
+        console.log('Dados do usuário preparados:', { ...userData, password_hash: '[HIDDEN]' });
+        
         // Verificar se email já existe
-        const { data: existingUser } = await supabase
+        const { data: existingUser, error: checkError } = await supabase
             .from('users')
             .select('id')
             .eq('email', userData.email)
             .single();
         
-        if (existingUser) {
+        if (checkError && checkError.code !== 'PGRST116') {
+            // PGRST116 é "not found", que é o que queremos
+            console.error('Erro ao verificar email existente:', checkError);
+            throw new Error('Erro ao verificar email. Tente novamente.');
+        }
+        
+        if (existingUser && !checkError) {
             throw new Error('Este email já está cadastrado');
         }
+        
+        console.log('Email disponível, criando usuário...');
         
         // Criar usuário
         const { data: user, error: userError } = await supabase
@@ -218,7 +230,10 @@ async function handleFormSubmit(e) {
             .select()
             .single();
         
-        if (userError) throw userError;
+        if (userError) {
+            console.error('Erro ao criar usuário:', userError);
+            throw new Error(`Erro ao criar conta: ${userError.message}`);
+        }
         
         console.log('Usuário criado:', user);
         
@@ -260,6 +275,9 @@ async function handleFormSubmit(e) {
         showLoading(false);
         showSuccess();
         
+        // Limpar formulário
+        registerForm.reset();
+        
         // Redirecionar após 3 segundos
         setTimeout(() => {
             window.location.href = 'login.html';
@@ -268,7 +286,7 @@ async function handleFormSubmit(e) {
     } catch (error) {
         console.error('Erro ao criar conta:', error);
         showLoading(false);
-        showError(error.message);
+        showError(error.message || 'Erro desconhecido ao criar conta');
     }
 }
 
