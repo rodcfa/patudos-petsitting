@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patudos - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #667eea;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .welcome-text {
+            margin-bottom: 40px;
+        }
+
+        .welcome-text h2 {
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn.secondary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .login-btn.admin {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .login-form {
+            text-align: left;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .back-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #4b5563;
+        }
+
+        .divider {
+            margin: 1.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/assets/login-Cx35OYX0.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/index-C_6bkvJA.js">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-paw"></i>
+            <h1>Patudos</h1>
+        </div>
+
+        <div class="welcome-text">
+            <h2>Acesso ao Sistema</h2>
+            <p>Faça login para acessar o calendário de agendamentos</p>
+        </div>
+
+        <!-- Opções de Login -->
+        <div class="login-options" id="loginOptions">
+            <button class="login-btn" onclick="showClientLogin()">
+                <i class="fas fa-user"></i>
+                Login Cliente
+            </button>
+
+            <button class="login-btn admin" onclick="showAdminLogin()">
+                <i class="fas fa-shield-alt"></i>
+                Acesso Administrador
+            </button>
+
+            <div class="divider">
+                <span>ou</span>
+            </div>
+
+            <a href="register.html" class="login-btn secondary">
+                <i class="fas fa-user-plus"></i>
+                Criar Nova Conta
+            </a>
+        </div>
+
+        <!-- Formulário de Login -->
+        <form class="login-form" id="loginForm">
+            <div class="error-message" id="errorMessage"></div>
+            
+            <div class="form-group">
+                <label for="username" id="usernameLabel">Usuário:</label>
+                <input type="text" id="username" name="username" required placeholder="RC-adm">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••••">
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-sign-in-alt"></i>
+                Entrar
+            </button>
+
+            <button type="button" class="back-btn" onclick="showLoginOptions()">
+                <i class="fas fa-arrow-left"></i>
+                Voltar
+            </button>
+        </form>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+</body>
+</html>
