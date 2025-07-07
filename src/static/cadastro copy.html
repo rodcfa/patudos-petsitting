@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patudos - Cadastro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #667eea;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .label-bilingual {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .label-pt {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .label-en {
+            color: #666;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input[type="date"],
+        .form-group input[type="time"] {
+            cursor: pointer;
+        }
+
+        .dog-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e1e5e9;
+            position: relative;
+        }
+
+        .dog-section.additional {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        .dog-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dog-title {
+            color: #333;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .remove-dog-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-dog-btn:hover {
+            background: #c0392b;
+        }
+
+        .add-dog-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto;
+        }
+
+        .add-dog-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e1e5e9;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-toggle,
+            .back-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                left: auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="login.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span id="backText">Voltar</span>
+    </a>
+
+    <button class="language-toggle" onclick="toggleLanguage()">
+        <i class="fas fa-globe"></i> EN
+    </button>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-paw"></i>
+                <h1>Patudos</h1>
+            </div>
+            <h2 id="pageTitle">Cadastro de Cliente</h2>
+            <p id="pageSubtitle">Preencha as informações para criar sua conta</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <form id="registrationForm">
+            <!-- Seção Proprietário -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-user"></i>
+                    <span id="ownerSectionTitle">Informações do Proprietário</span>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Nome do proprietário <span class="required">*</span></span>
+                            <span class="label-en">Owner's Name</span>
+                        </label>
+                        <input type="text" id="ownerName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Contacto telefónico <span class="required">*</span></span>
+                            <span class="label-en">Telephone Contact</span>
+                        </label>
+                        <input type="tel" id="ownerPhone" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Endereço de e-mail <span class="required">*</span></span>
+                            <span class="label-en">Email Address</span>
+                        </label>
+                        <input type="email" id="ownerEmail" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Estadia -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-calendar"></i>
+                    <span id="staySectionTitle">Informações da Estadia</span>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Data de entrada <span class="required">*</span></span>
+                            <span class="label-en">Check-in Date</span>
+                        </label>
+                        <input type="date" id="checkinDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Data de saída <span class="required">*</span></span>
+                            <span class="label-en">Check-out Date</span>
+                        </label>
+                        <input type="date" id="checkoutDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Horário desejado de entrega/recolha</span>
+                            <span class="label-en">Desired Pick-up/Drop-off Times</span>
+                        </label>
+                        <input type="time" id="pickupTime">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Cães -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-dog"></i>
+                    <span id="dogsSectionTitle">Informações dos Cães</span>
+                </div>
+                
+                <div id="dogsContainer">
+                    <!-- Primeiro cão (sempre presente) -->
+                    <div class="dog-section" data-dog-index="0">
+                        <div class="dog-header">
+                            <div class="dog-title">
+                                <i class="fas fa-dog"></i>
+                                <span id="dogTitle1">Cão 1</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Nome do cão <span class="required">*</span></span>
+                                    <span class="label-en">Dog's Name</span>
+                                </label>
+                                <input type="text" name="dogName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Raça <span class="required">*</span></span>
+                                    <span class="label-en">Breed</span>
+                                </label>
+                                <input type="text" name="dogBreed" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Idade (anos) <span class="required">*</span></span>
+                                    <span class="label-en">Age (years)</span>
+                                </label>
+                                <input type="number" name="dogAge" min="0" max="30" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Sexo <span class="required">*</span></span>
+                                    <span class="label-en">Sex</span>
+                                </label>
+                                <select name="dogSex" required>
+                                    <option value="">Selecione / Select</option>
+                                    <option value="male">Macho / Male</option>
+                                    <option value="female">Fêmea / Female</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Peso (kg)</span>
+                                    <span class="label-en">Weight (kg)</span>
+                                </label>
+                                <input type="number" name="dogWeight" min="0" step="0.1">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Tem todas as vacinas em dia? <span class="required">*</span></span>
+                                    <span class="label-en">Are all vaccinations up to date?</span>
+                                </label>
+                                <select name="vaccinationsUpToDate" required>
+                                    <option value="">Selecione / Select</option>
+                                    <option value="yes">Sim / Yes</option>
+                                    <option value="no">Não / No</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Data da última vacinação</span>
+                                    <span class="label-en">Date of Last Vaccination</span>
+                                </label>
+                                <input type="date" name="lastVaccinationDate">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Tem certificado de vacinação?</span>
+                                    <span class="label-en">Do you have a vaccination certificate?</span>
+                                </label>
+                                <select name="hasVaccinationCertificate">
+                                    <option value="">Selecione / Select</option>
+                                    <option value="yes">Sim / Yes</option>
+                                    <option value="no">Não / No</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Medicações atuais (nome e dosagem)</span>
+                                    <span class="label-en">Current Medications (name & dosage)</span>
+                                </label>
+                                <textarea name="currentMedications" placeholder="Descreva as medicações atuais... / Describe current medications..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">O cão tem alergias? Se sim, quais?</span>
+                                    <span class="label-en">Does the dog have any allergies? If yes, please specify.</span>
+                                </label>
+                                <textarea name="allergies" placeholder="Descreva as alergias... / Describe allergies..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Tem alguma condição médica? Se sim, quais?</span>
+                                    <span class="label-en">Does the dog have any medical conditions? If yes, please specify.</span>
+                                </label>
+                                <textarea name="medicalConditions" placeholder="Descreva as condições médicas... / Describe medical conditions..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">O seu cão é sociável com outros cães?</span>
+                                    <span class="label-en">Is your dog sociable with other dogs?</span>
+                                </label>
+                                <select name="sociableWithDogs">
+                                    <option value="">Selecione / Select</option>
+                                    <option value="yes">Sim / Yes</option>
+                                    <option value="no">Não / No</option>
+                                    <option value="depends">Depende / Depends</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">O seu cão é sociável com estranhos?</span>
+                                    <span class="label-en">Is your dog friendly with strangers?</span>
+                                </label>
+                                <select name="friendlyWithStrangers">
+                                    <option value="">Selecione / Select</option>
+                                    <option value="yes">Sim / Yes</option>
+                                    <option value="no">Não / No</option>
+                                    <option value="depends">Depende / Depends</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Exibe comportamentos agressivos?</span>
+                                    <span class="label-en">Does the dog exhibit any aggressive behavior?</span>
+                                </label>
+                                <select name="aggressiveBehavior">
+                                    <option value="">Selecione / Select</option>
+                                    <option value="yes">Sim / Yes</option>
+                                    <option value="no">Não / No</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Instruções de alimentação (tipo, quantidade, horários)</span>
+                                    <span class="label-en">Feeding Instructions (type, quantity, schedule)</span>
+                                </label>
+                                <textarea name="feedingInstructions" placeholder="Descreva as instruções de alimentação... / Describe feeding instructions..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-bilingual">
+                                    <span class="label-pt">Petiscos preferidos</span>
+                                    <span class="label-en">Favorite Treats</span>
+                                </label>
+                                <input type="text" name="favoriteTreats">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="add-dog-btn" onclick="addDog()">
+                    <i class="fas fa-plus"></i>
+                    <span id="addDogText">Adicionar Outro Cão</span>
+                </button>
+            </div>
+
+            <!-- Seção Emergência -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-phone-alt"></i>
+                    <span id="emergencySectionTitle">Contactos de Emergência</span>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Contacto de emergência (nome e telefone) <span class="required">*</span></span>
+                            <span class="label-en">Emergency Contact (name & phone)</span>
+                        </label>
+                        <textarea id="emergencyContact" required placeholder="Nome: João Silva, Telefone: +351 912 345 678"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Veterinário de referência (nome, clínica, telefone) <span class="required">*</span></span>
+                            <span class="label-en">Veterinarian of Choice (name, clinic, phone)</span>
+                        </label>
+                        <textarea id="veterinarian" required placeholder="Dr. Maria Santos, Clínica VetCare, +351 213 456 789"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Autorizo cuidados veterinários de emergência <span class="required">*</span></span>
+                            <span class="label-en">I authorize emergency veterinary care</span>
+                        </label>
+                        <select id="authorizeEmergencyCare" required>
+                            <option value="">Selecione / Select</option>
+                            <option value="yes">Sim / Yes</option>
+                            <option value="no">Não / No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="label-bilingual">
+                            <span class="label-pt">Observações adicionais</span>
+                            <span class="label-en">Additional Comments</span>
+                        </label>
+                        <textarea id="additionalComments" placeholder="Qualquer informação adicional importante... / Any additional important information..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-check"></i>
+                    <span id="submitText">Finalizar Cadastro</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentLanguage = 'pt';
+        let dogCount = 1;
+
+        const translations = {
+            pt: {
+                backText: 'Voltar',
+                pageTitle: 'Cadastro de Cliente',
+                pageSubtitle: 'Preencha as informações para criar sua conta',
+                ownerSectionTitle: 'Informações do Proprietário',
+                staySectionTitle: 'Informações da Estadia',
+                dogsSectionTitle: 'Informações dos Cães',
+                emergencySectionTitle: 'Contactos de Emergência',
+                dogTitle1: 'Cão 1',
+                addDogText: 'Adicionar Outro Cão',
+                submitText: 'Finalizar Cadastro',
+                removeDogText: 'Remover'
+            },
+            en: {
+                backText: 'Back',
+                pageTitle: 'Client Registration',
+                pageSubtitle: 'Fill in the information to create your account',
+                ownerSectionTitle: 'Owner Information',
+                staySectionTitle: 'Stay Information',
+                dogsSectionTitle: 'Dogs Information',
+                emergencySectionTitle: 'Emergency Contacts',
+                dogTitle1: 'Dog 1',
+                addDogText: 'Add Another Dog',
+                submitText: 'Complete Registration',
+                removeDogText: 'Remove'
+            }
+        };
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'pt' ? 'en' : 'pt';
+            updateLanguage();
+            
+            const langBtn = document.querySelector('.language-toggle');
+            langBtn.innerHTML = `<i class="fas fa-globe"></i> ${currentLanguage === 'pt' ? 'EN' : 'PT'}`;
+        }
+
+        function updateLanguage() {
+            const texts = translations[currentLanguage];
+            
+            Object.keys(texts).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = texts[key];
+                }
+            });
+
+            // Atualizar títulos dos cães adicionais
+            document.querySelectorAll('.dog-section').forEach((section, index) => {
+                const title = section.querySelector('.dog-title span');
+                if (title) {
+                    title.textContent = currentLanguage === 'pt' ? `Cão ${index + 1}` : `Dog ${index + 1}`;
+                }
+            });
+        }
+
+        function addDog() {
+            dogCount++;
+            const dogsContainer = document.getElementById('dogsContainer');
+            
+            const dogSection = document.createElement('div');
+            dogSection.className = 'dog-section additional';
+            dogSection.setAttribute('data-dog-index', dogCount - 1);
+            
+            dogSection.innerHTML = `
+                <div class="dog-header">
+                    <div class="dog-title">
+                        <i class="fas fa-dog"></i>
+                        <span>${currentLanguage === 'pt' ? `Cão ${dogCount}` : `Dog ${dogCount}`}</span>
+                    </div>
+                    <button type="button" class="remove-dog-btn" onclick="removeDog(this)">
+                        <i class="fas fa-trash"></i> ${currentLanguage === 'pt' ? 'Remover' : 'Remove'}
+                    </button>
+                </div>
+                
+                <div class="form-grid">
+                    ${getDogFormFields()}
+                </div>
+            `;
+            
+            dogsContainer.appendChild(dogSection);
+            updateProgress();
+        }
+
+        function removeDog(button) {
+            const dogSection = button.closest('.dog-section');
+            dogSection.remove();
+            dogCount--;
+            
+            // Renumerar os cães
+            document.querySelectorAll('.dog-section').forEach((section, index) => {
+                const title = section.querySelector('.dog-title span');
+                title.textContent = currentLanguage === 'pt' ? `Cão ${index + 1}` : `Dog ${index + 1}`;
+                section.setAttribute('data-dog-index', index);
+            });
+            
+            updateProgress();
+        }
+
+        function getDogFormFields() {
+            return `
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Nome do cão <span class="required">*</span></span>
+                        <span class="label-en">Dog's Name</span>
+                    </label>
+                    <input type="text" name="dogName" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Raça <span class="required">*</span></span>
+                        <span class="label-en">Breed</span>
+                    </label>
+                    <input type="text" name="dogBreed" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Idade (anos) <span class="required">*</span></span>
+                        <span class="label-en">Age (years)</span>
+                    </label>
+                    <input type="number" name="dogAge" min="0" max="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Sexo <span class="required">*</span></span>
+                        <span class="label-en">Sex</span>
+                    </label>
+                    <select name="dogSex" required>
+                        <option value="">Selecione / Select</option>
+                        <option value="male">Macho / Male</option>
+                        <option value="female">Fêmea / Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Peso (kg)</span>
+                        <span class="label-en">Weight (kg)</span>
+                    </label>
+                    <input type="number" name="dogWeight" min="0" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Tem todas as vacinas em dia? <span class="required">*</span></span>
+                        <span class="label-en">Are all vaccinations up to date?</span>
+                    </label>
+                    <select name="vaccinationsUpToDate" required>
+                        <option value="">Selecione / Select</option>
+                        <option value="yes">Sim / Yes</option>
+                        <option value="no">Não / No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Data da última vacinação</span>
+                        <span class="label-en">Date of Last Vaccination</span>
+                    </label>
+                    <input type="date" name="lastVaccinationDate">
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Tem certificado de vacinação?</span>
+                        <span class="label-en">Do you have a vaccination certificate?</span>
+                    </label>
+                    <select name="hasVaccinationCertificate">
+                        <option value="">Selecione / Select</option>
+                        <option value="yes">Sim / Yes</option>
+                        <option value="no">Não / No</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Medicações atuais (nome e dosagem)</span>
+                        <span class="label-en">Current Medications (name & dosage)</span>
+                    </label>
+                    <textarea name="currentMedications" placeholder="Descreva as medicações atuais... / Describe current medications..."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="label-bilingual">
+                        <span class="label-pt">O cão tem alergias? Se sim, quais?</span>
+                        <span class="label-en">Does the dog have any allergies? If yes, please specify.</span>
+                    </label>
+                    <textarea name="allergies" placeholder="Descreva as alergias... / Describe allergies..."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Tem alguma condição médica? Se sim, quais?</span>
+                        <span class="label-en">Does the dog have any medical conditions? If yes, please specify.</span>
+                    </label>
+                    <textarea name="medicalConditions" placeholder="Descreva as condições médicas... / Describe medical conditions..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">O seu cão é sociável com outros cães?</span>
+                        <span class="label-en">Is your dog sociable with other dogs?</span>
+                    </label>
+                    <select name="sociableWithDogs">
+                        <option value="">Selecione / Select</option>
+                        <option value="yes">Sim / Yes</option>
+                        <option value="no">Não / No</option>
+                        <option value="depends">Depende / Depends</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">O seu cão é sociável com estranhos?</span>
+                        <span class="label-en">Is your dog friendly with strangers?</span>
+                    </label>
+                    <select name="friendlyWithStrangers">
+                        <option value="">Selecione / Select</option>
+                        <option value="yes">Sim / Yes</option>
+                        <option value="no">Não / No</option>
+                        <option value="depends">Depende / Depends</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Exibe comportamentos agressivos?</span>
+                        <span class="label-en">Does the dog exhibit any aggressive behavior?</span>
+                    </label>
+                    <select name="aggressiveBehavior">
+                        <option value="">Selecione / Select</option>
+                        <option value="yes">Sim / Yes</option>
+                        <option value="no">Não / No</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Instruções de alimentação (tipo, quantidade, horários)</span>
+                        <span class="label-en">Feeding Instructions (type, quantity, schedule)</span>
+                    </label>
+                    <textarea name="feedingInstructions" placeholder="Descreva as instruções de alimentação... / Describe feeding instructions..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-bilingual">
+                        <span class="label-pt">Petiscos preferidos</span>
+                        <span class="label-en">Favorite Treats</span>
+                    </label>
+                    <input type="text" name="favoriteTreats">
+                </div>
+            `;
+        }
+
+        function updateProgress() {
+            const totalFields = document.querySelectorAll('input[required], select[required], textarea[required]').length;
+            const filledFields = document.querySelectorAll('input[required]:valid, select[required]:valid, textarea[required]:valid').length;
+            const progress = (filledFields / totalFields) * 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Atualizar progresso em tempo real
+        document.addEventListener('input', updateProgress);
+        document.addEventListener('change', updateProgress);
+
+        // Submissão do formulário
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Coletar todos os dados do formulário
+            const formData = new FormData(this);
+            const data = {};
+            
+            // Dados do proprietário
+            data.owner = {
+                name: formData.get('ownerName') || document.getElementById('ownerName').value,
+                phone: formData.get('ownerPhone') || document.getElementById('ownerPhone').value,
+                email: formData.get('ownerEmail') || document.getElementById('ownerEmail').value
+            };
+            
+            // Dados da estadia
+            data.stay = {
+                checkinDate: document.getElementById('checkinDate').value,
+                checkoutDate: document.getElementById('checkoutDate').value,
+                pickupTime: document.getElementById('pickupTime').value
+            };
+            
+            // Dados dos cães
+            data.dogs = [];
+            document.querySelectorAll('.dog-section').forEach((section, index) => {
+                const dog = {};
+                section.querySelectorAll('input, select, textarea').forEach(field => {
+                    if (field.name) {
+                        dog[field.name] = field.value;
+                    }
+                });
+                data.dogs.push(dog);
+            });
+            
+            // Dados de emergência
+            data.emergency = {
+                contact: document.getElementById('emergencyContact').value,
+                veterinarian: document.getElementById('veterinarian').value,
+                authorizeEmergencyCare: document.getElementById('authorizeEmergencyCare').value,
+                additionalComments: document.getElementById('additionalComments').value
+            };
+            
+            console.log('Registration data:', data);
+            
+            // Aqui você integrará com o Supabase
+            alert(currentLanguage === 'pt' ? 
+                'Cadastro realizado com sucesso! Redirecionando...' : 
+                'Registration completed successfully! Redirecting...');
+            
+            // Redirecionar para login ou dashboard
+            window.location.href = 'login.html';
+        });
+
+        // Inicializar
+        updateProgress();
+    </script>
+</body>
+</html>
+
