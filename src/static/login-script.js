@@ -65,7 +65,7 @@ function showAdminLogin() {
     // Atualizar placeholder e labels para admin
     document.querySelector('label[for="username"]').textContent = 'Usuário:';
     document.getElementById('username').type = 'text';
-    document.getElementById('username').placeholder = 'Usuário do administrador';
+    document.getElementById('username').placeholder = 'Nome de usuário';
     submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Entrar como Admin';
 }
 

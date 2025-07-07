@@ -270,12 +270,12 @@
         </div>
 
         <!-- Formulário de Login -->
-            <p>Não tem uma conta? <a href="register.html" class="register-link">Cadastre-se aqui</a></p>
+        <form class="login-form" id="loginForm">
             <div class="error-message" id="errorMessage"></div>
             
             <div class="form-group">
                 <label for="username" id="usernameLabel">Usuário:</label>
-                <input type="text" id="username" name="username" required placeholder="RC-adm">
+                <input type="text" id="username" name="username" required placeholder="Nome de usuário">
             </div>
             
             <div class="form-group">
@@ -296,9 +296,20 @@
     </div>
 
     <!-- Loading Spinner -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
+    <div class="loading-overlay" id="loadingOverlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.8); display: none; align-items: center; justify-content: center; z-index: 2000;">
+        <div class="spinner" style="width: 3rem; height: 3rem; border: 3px solid #e5e7eb; border-top: 3px solid #8b5cf6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
     </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-overlay.active {
+            display: flex !important;
+        }
+    </style>
 
     <script type="module" src="login-script.js"></script>
 </body>
