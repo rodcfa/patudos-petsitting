@@ -241,13 +241,6 @@ async function handleFormSubmit(e) {
         if (userError) {
             console.error('Erro ao criar perfil do usuário:', userError);
             
-            // Se falhou ao criar o perfil, tentar deletar o usuário do Auth
-            try {
-                await supabase.auth.admin.deleteUser(authData.user.id);
-            } catch (cleanupError) {
-                console.error('Erro ao limpar usuário do Auth:', cleanupError);
-            }
-            
             throw new Error(`Erro ao criar perfil: ${userError.message}`);
         }
         
